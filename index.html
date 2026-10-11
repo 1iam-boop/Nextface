@@ -3,88 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Next Face</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Vitrine Chogan — Next Face</title>
+  <meta name="description" content="Vitrine des produits Chogan : parfums, soins, maison et bien-être. Site de présentation, sans vente en ligne." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/vitrine.css" />
 </head>
 <body>
-  <header>
-    <section class="logo-section">
-      <img src="logo next face.png" alt="Logo Next Face" />
-      <div class="logo-text">
-        <h2>Le groupe</h2>
-        <p>Votre vitrine digitale</p>
-  </div>
-    </section>
 
+  <header class="topbar">
+    <a href="#accueil" class="brand">
+      <span class="brand-mark">C</span>
+      <span class="brand-name">Chogan<small>Vitrine</small></span>
+    </a>
+    <button class="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+    <nav class="nav">
+      <a href="#univers">Univers</a>
+      <a href="#parfums">Parfums</a>
+      <a href="#catalogue">Catalogue</a>
+      <a href="#maison">La Maison</a>
+      <a href="#contact">Contact</a>
+      <a href="equipe.html">L'équipe</a>
+    </nav>
   </header>
 
-  <section class="profile sidy">
-    <img src="profile sidi.jpeg" alt="sidy" />
-    <div class="text">
-      <h3>Sidy</h3>
-      <h3>le rédacteur</h3>
-      <p>
-        Je m'appelle Sidy, j'ai 19 ans et je suis en première année de BTS SIO. Je m’oriente vers l’option SISR afin de me spécialiser en administration des systèmes et réseaux. Ce domaine me passionne, notamment pour ses enjeux en cybersécurité, que je souhaite approfondir en licence. Mon objectif est de devenir Administrateur systèmes et réseaux, un métier qui demande rigueur, curiosité et sens de l’analyse. Je suis motivé à progresser et à construire une carrière solide dans l’informatique.
-      </p>
+  <section id="accueil" class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Made in Italy · depuis 2013</p>
+      <h1>L'excellence olfactive<br /><em>à l'italienne</em></h1>
+      <p class="lead">Découvrez l'univers Chogan : parfums, soins du visage et du corps, cheveux, maison et bien-être. Une vitrine pour explorer — pas de panier, pas de paiement.</p>
+      <div class="hero-cta">
+        <a href="#catalogue" class="btn btn-gold">Explorer le catalogue</a>
+        <a href="#contact" class="btn btn-ghost">Demander un conseil</a>
+      </div>
+    </div>
+    <div class="hero-bottles" aria-hidden="true">
+      <span class="bottle b1"></span><span class="bottle b2"></span><span class="bottle b3"></span>
     </div>
   </section>
 
-  <section class="profile adam">
-    <img src="profile adam.JPG" alt="adam" />
-    <div class="text">
-      <h3>Adam</h3>
-      <h3>le cerveau</h3>
-      <p>
-        Je m’appelle Adam SAADA, je suis en plein apprentissage de l’informatique et j’ai pour l’instant des bases très simples, notamment en bureautique (Word, Excel, PowerPoint), en maintenance de postes, en réseaux (IP et notions de sécurité) ainsi qu’en bases de données (SQL).
-        Je suis particulièrement intéressé par les systèmes réseaux et la cybersécurité.
-        Mon objectif principal est de devenir ingénieur en cybersécurité, intégrer une école d’ingénieur spécialisée dans ce domaine et, par la suite, acquérir une expérience professionnelle à l’étranger.
-      </p>
+  <section id="univers" class="section">
+    <div class="section-head">
+      <p class="eyebrow">Nos univers</p>
+      <h2>Toute la gamme en un coup d'œil</h2>
+    </div>
+    <div class="universe-grid" id="universeGrid"></div>
+  </section>
+
+  <section id="parfums" class="section section-dark">
+    <div class="section-head">
+      <p class="eyebrow">Olfazeta · Mψtologik</p>
+      <h2>Les familles olfactives</h2>
+      <p class="sub">Chaque parfum Chogan porte un numéro. Retrouvez-le selon votre famille olfactive préférée.</p>
+    </div>
+    <div class="families" id="families"></div>
+    <div class="formats">
+      <div><strong>50 ml</strong><span>Eau de parfum</span></div>
+      <div><strong>70 ml</strong><span>Collection Luxury</span></div>
+      <div><strong>Échantillons</strong><span>Pour tester avant de choisir</span></div>
+      <div><strong>Coffrets</strong><span>Idées cadeaux</span></div>
     </div>
   </section>
 
-  <section class="profile anthony">
-    <img src="profile anthony.JPG" alt="anthony"/>
-    <div class="text">
-      <h3>Anthony</h3>
-      <h3>le chercheur</h3>
-      <p>
-        Je m'appelle anthony brazeau j'ai 19 ans et je suis actuelement en BTS SIO .
-        Je commence à connaitre des base de la programation en HTML et Phython .
-        Plus tard je souhaite devenir programeur dans l'univers des jeux video chez CDProjet
-      </p>
+  <section id="catalogue" class="section">
+    <div class="section-head">
+      <p class="eyebrow">Catalogue</p>
+      <h2>Tous les produits</h2>
+    </div>
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="Rechercher un produit, un numéro, une note…" aria-label="Rechercher" />
+      <div class="chips" id="chips" role="tablist"></div>
+    </div>
+    <p class="count" id="count"></p>
+    <div class="product-grid" id="productGrid"></div>
+  </section>
+
+  <section id="maison" class="section section-ivory">
+    <div class="about">
+      <div>
+        <p class="eyebrow">La Maison Chogan</p>
+        <h2>Une entreprise italienne</h2>
+        <p>Fondée en 2013 par Michelangelo Paradiso, Chogan Group S.p.A. conçoit et fabrique en Italie ses parfums et cosmétiques. Ses parfums sont élaborés à partir d'alcool d'origine biologique et d'essences de haute concentration.</p>
+        <p>Au fil des années, la maison a élargi son savoir-faire : soins du visage et du corps, capillaires, parfums d'ambiance, bien-être, épicerie fine italienne et accessoires.</p>
+      </div>
+      <ul class="values">
+        <li><strong>Made in Italy</strong><span>Conception et production italiennes</span></li>
+        <li><strong>Haute concentration</strong><span>Des parfums qui tiennent</span></li>
+        <li><strong>Non testé sur les animaux</strong><span>Une beauté responsable</span></li>
+        <li><strong>Prix accessibles</strong><span>Le luxe sans le surcoût</span></li>
+      </ul>
     </div>
   </section>
 
-  <section class="profile rayan">
-    <img src="profile rayan.JPG" alt="rayan"/>
-    <div class="text">
-      <h3>rayan</h3>
-      <h3>le graphiste</h3>
-      <p>
-        Je m'appelle Rayan Habtiche, j'ai 21 ans et je suis actuellement en première année de BTS SIO.
-        Après mon diplôme, j'aimerais poursuivre mes études avec une licence en informatique orientée vers le développement, ce qui est en accord avec mon projet d'avenir : devenir développeur.
-        Je suis également à l'aise avec l'informatique puisque j'utilise quotidiennement un ordinateur, et mon bac pro RPIP a développé ma capacité à m'adapter à des logiciels plus complexes.
-      </p>
+  <section id="contact" class="section section-dark contact">
+    <p class="eyebrow">Conseil personnalisé</p>
+    <h2>Un produit vous intéresse ?</h2>
+    <p class="sub">Ce site est une vitrine : aucune vente en ligne. Contactez-nous pour un conseil, un échantillon ou une commande auprès d'un(e) conseiller(e) Chogan.</p>
+    <div class="hero-cta">
+      <a href="mailto:contact@exemple.fr" class="btn btn-gold">Nous écrire</a>
+      <a href="https://www.instagram.com/" class="btn btn-ghost" target="_blank" rel="noopener">Instagram</a>
     </div>
   </section>
 
-  <section class="profile liam">
-    <img src="profile liam.jpeg" alt="liam" />
-    <div class="text">
-      <h3>liam</h3>
-      <h3>le developeur</h3>
-      <p>
-        Je suis Liam Fouillade, étudiant en développement, passionné par le code et spécialisé en cybersécurité ainsi qu’en développement Python.
-        Curieux et discipliné, j’ai également une forte sensibilité pour le design web, avec une véritable appréciation du HTML et du CSS.
-        Mon objectif est clair : travailler en freelance avec des groupes influents, en leur apportant des solutions numériques sécurisées, performantes et sur mesure.
-        Je combine rigueur technique et créativité pour concevoir des environnements digitaux fiables, élégants et adaptés aux enjeux stratégiques de mes clients.
-      </p>
-    </div>
-  </section>
-
-  <footer>
-    <h2>Travaillons ensemble</h2>
-    <p>Contactez-nous pour collaborer</p>
+  <footer class="footer">
+    <p>Vitrine réalisée par <a href="equipe.html">l'équipe Next Face</a>.</p>
+    <p class="legal">Site de présentation indépendant, non affilié à Chogan Group S.p.A. Les marques citées appartiennent à leurs propriétaires. Aucune transaction n'est réalisée sur ce site.</p>
   </footer>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" aria-label="Fermer">×</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="assets/js/produits.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
