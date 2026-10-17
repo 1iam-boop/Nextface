@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vitrine Chogan</title>
-  <meta name="description" content="Vitrine des produits Chogan : parfums, soins, maison et bien-être. Site de présentation, sans vente en ligne." />
+  <meta name="description" content="Vitrine des soins Aurodhea by Chogan : corps, visage, cheveux, solaire, brumes Lush Cloud. Site de présentation, sans vente en ligne." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -20,18 +20,19 @@
     <button class="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
     <nav class="nav">
       <a href="#univers">Univers</a>
-      <a href="#parfums">Parfums</a>
+      <a href="#lush-cloud">Lush Cloud</a>
+      <a href="#ingredients">Ingrédients</a>
+      <a href="#routines">Routines</a>
       <a href="#catalogue">Catalogue</a>
-      <a href="#maison">La Maison</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
   <section id="accueil" class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Made in Italy · depuis 2013</p>
-      <h1>L'excellence olfactive<br /><em>à l'italienne</em></h1>
-      <p class="lead">Découvrez l'univers Chogan : parfums, soins du visage et du corps, cheveux, maison et bien-être. Une vitrine pour explorer — pas de panier, pas de paiement.</p>
+      <p class="eyebrow">Aurodhea by Chogan · Made in Italy</p>
+      <h1>La lumière d'une<br /><em>nouvelle beauté</em></h1>
+      <p class="lead">Soins corps, visage, cheveux, solaires et brumes parfumées Lush Cloud. Ingrédients naturels, testés dermatologiquement, sans parabènes. Une vitrine pour découvrir : pas de panier, pas de paiement.</p>
       <div class="hero-cta">
         <a href="#catalogue" class="btn btn-gold">Explorer le catalogue</a>
         <a href="#contact" class="btn btn-ghost">Demander un conseil</a>
@@ -50,19 +51,30 @@
     <div class="universe-grid" id="universeGrid"></div>
   </section>
 
-  <section id="parfums" class="section section-dark">
+  <section id="lush-cloud" class="section section-dark">
     <div class="section-head">
-      <p class="eyebrow">Olfazeta · Mψtologik</p>
-      <h2>Les familles olfactives</h2>
-      <p class="sub">Chaque parfum Chogan porte un numéro. Retrouvez-le selon votre famille olfactive préférée.</p>
+      <p class="eyebrow">Brumes corps Lush Cloud</p>
+      <h2>Cinq sillages solaires</h2>
+      <p class="sub">Sprays corps parfumés enrichis du complexe exclusif PUREYOUTH™ et de glycérine : ils hydratent, exfolient en douceur, protègent le collagène et laissent une sensation de fraîcheur. Formulations Made in Italy.</p>
     </div>
-    <div class="families" id="families"></div>
-    <div class="formats">
-      <div><strong>50 ml</strong><span>Eau de parfum</span></div>
-      <div><strong>70 ml</strong><span>Collection Luxury</span></div>
-      <div><strong>Échantillons</strong><span>Pour tester avant de choisir</span></div>
-      <div><strong>Coffrets</strong><span>Idées cadeaux</span></div>
+    <div class="mists" id="mists"></div>
+  </section>
+
+  <section id="ingredients" class="section section-ivory">
+    <div class="section-head">
+      <p class="eyebrow">Les ingrédients phares</p>
+      <h2>Ce qui fait la différence</h2>
+      <p class="sub sub-dark">Cliquez sur un ingrédient pour voir tous les produits qui en contiennent.</p>
     </div>
+    <div class="ingredients" id="ingredientsGrid"></div>
+  </section>
+
+  <section id="routines" class="section">
+    <div class="section-head">
+      <p class="eyebrow">Routines visage conseillées</p>
+      <h2>Trois rituels, étape par étape</h2>
+    </div>
+    <div class="routines" id="routinesGrid"></div>
   </section>
 
   <section id="catalogue" class="section">
@@ -71,26 +83,31 @@
       <h2>Tous les produits</h2>
     </div>
     <div class="toolbar">
-      <input type="search" id="search" placeholder="Rechercher un produit, un numéro, une note…" aria-label="Rechercher" />
+      <input type="search" id="search" placeholder="Rechercher un produit, une référence, un actif…" aria-label="Rechercher" />
       <div class="chips" id="chips" role="tablist"></div>
+      <div class="subbar">
+        <select id="rubrique" aria-label="Rubrique"></select>
+        <label class="toggle"><input type="checkbox" id="fBio" /> Bio</label>
+        <label class="toggle"><input type="checkbox" id="fVegan" /> Vegan</label>
+      </div>
     </div>
     <p class="count" id="count"></p>
     <div class="product-grid" id="productGrid"></div>
   </section>
 
-  <section id="maison" class="section section-ivory">
+  <section id="engagements" class="section section-ivory">
     <div class="about">
       <div>
-        <p class="eyebrow">La Maison Chogan</p>
-        <h2>Une entreprise italienne</h2>
-        <p>Fondée en 2013 par Michelangelo Paradiso, Chogan Group S.p.A. conçoit et fabrique en Italie ses parfums et cosmétiques. Ses parfums sont élaborés à partir d'alcool d'origine biologique et d'essences de haute concentration.</p>
-        <p>Au fil des années, la maison a élargi son savoir-faire : soins du visage et du corps, capillaires, parfums d'ambiance, bien-être, épicerie fine italienne et accessoires.</p>
+        <p class="eyebrow">Aurodhea by Chogan</p>
+        <h2>Une beauté naturelle et exigeante</h2>
+        <p>Aurodhea est la gamme de soins de Chogan Group, maison italienne fondée en 2013. Ses formules associent des actifs reconnus, comme la bave d'escargot, le lait d'ânesse ou le neem, à des ingrédients naturels.</p>
+        <p>De nombreuses références sont certifiées bio et vegan, et chaque produit convient à tous les types de peau.</p>
       </div>
       <ul class="values">
-        <li><strong>Made in Italy</strong><span>Conception et production italiennes</span></li>
-        <li><strong>Haute concentration</strong><span>Des parfums qui tiennent</span></li>
-        <li><strong>Non testé sur les animaux</strong><span>Une beauté responsable</span></li>
-        <li><strong>Prix accessibles</strong><span>Le luxe sans le surcoût</span></li>
+        <li><strong>Ingrédients naturels</strong><span>Nombreuses références bio et vegan</span></li>
+        <li><strong>Testés dermatologiquement</strong><span>pH équilibré, pour tous types de peau</span></li>
+        <li><strong>Sans parabènes</strong><span>Des formules plus douces</span></li>
+        <li><strong>Non testés sur les animaux</strong><span>Une beauté responsable</span></li>
       </ul>
     </div>
   </section>
@@ -98,7 +115,7 @@
   <section id="contact" class="section section-dark contact">
     <p class="eyebrow">Conseil personnalisé</p>
     <h2>Un produit vous intéresse ?</h2>
-    <p class="sub">Ce site est une vitrine : aucune vente en ligne. Contactez-nous pour un conseil, un échantillon ou une commande auprès d'un(e) conseiller(e) Chogan.</p>
+    <p class="sub">Ce site est une vitrine : aucune vente en ligne. Contactez-nous pour un conseil, une routine personnalisée ou une commande auprès d'un(e) conseiller(e) Chogan.</p>
     <div class="hero-cta">
       <a href="mailto:contact@exemple.fr" class="btn btn-gold">Nous écrire</a>
       <a href="https://www.instagram.com/" class="btn btn-ghost" target="_blank" rel="noopener">Instagram</a>
@@ -106,8 +123,8 @@
   </section>
 
   <footer class="footer">
-    <p>Vitrine Chogan.</p>
-    <p class="legal">Site de présentation indépendant, non affilié à Chogan Group S.p.A. Les marques citées appartiennent à leurs propriétaires. Aucune transaction n'est réalisée sur ce site.</p>
+    <p>Vitrine Chogan · Aurodhea</p>
+    <p class="legal">Site de présentation indépendant, non affilié à Chogan Group S.p.A. Les marques citées appartiennent à leurs propriétaires. Prix indicatifs, susceptibles d'évoluer. Aucune transaction n'est réalisée sur ce site.</p>
   </footer>
 
   <div class="modal" id="modal" hidden>
