@@ -25,7 +25,7 @@
       '<span class="universe-count">' + n + ' produit' + (n > 1 ? 's' : '') + ' →</span></a>';
   }).join("");
 
-  // Brumes Lush Cloud
+  // Brumes corps
   $("#mists").innerHTML = PRODUITS.filter((p) => p.notes).map((p) =>
     '<button class="mist" data-i="' + parRef[p.ref] + '"><span class="mist-ref">' + p.ref + '</span>' +
     '<h3>' + echapper(p.nom.replace("Brume corps ", "")) + '</h3>' +

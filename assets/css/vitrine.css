@@ -27,7 +27,7 @@ img, svg { display: block; max-width: 100%; }
 /* En-tête */
 .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: .9rem 5vw; background: rgba(14,14,14,.95); backdrop-filter: blur(6px); color: var(--ivoire); border-bottom: 1px solid rgba(201,164,92,.25); }
 .brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; }
-.brand-mark { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--or); border-radius: 50%; font: 600 1.4rem var(--serif); color: var(--or); }
+.brand-mark { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--or); border-radius: 50%; font: 600 1.05rem var(--serif); letter-spacing: .02em; color: var(--or); }
 .brand-name { font: 600 1.5rem var(--serif); letter-spacing: .12em; text-transform: uppercase; line-height: 1; }
 .brand-name small { display: block; font: 400 .6rem var(--sans); letter-spacing: .4em; color: var(--or); margin-top: .25rem; }
 .nav { display: flex; gap: 2rem; }
@@ -65,7 +65,7 @@ img, svg { display: block; max-width: 100%; }
 .universe p { color: var(--gris); font-size: .88rem; margin: 0 0 1rem; flex: 1; }
 .universe-count { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: var(--or); }
 
-/* Brumes Lush Cloud */
+/* Brumes corps */
 .mists { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; max-width: 1200px; margin: 0 auto; background: rgba(201,164,92,.25); border: 1px solid rgba(201,164,92,.25); }
 .mist { display: flex; flex-direction: column; gap: .4rem; text-align: left; background: var(--noir); color: var(--ivoire); border: 0; padding: 2rem 1.5rem; cursor: pointer; font-family: var(--sans); transition: background .3s; }
 .mist:hover, .mist:focus-visible { background: var(--noir-2); }

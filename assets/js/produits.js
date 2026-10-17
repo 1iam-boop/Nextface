@@ -1,5 +1,5 @@
 /*
- * Données de la vitrine — source : catalogue Aurodhea « AW Catalogue – Tous les produits ».
+ * Données de la vitrine AW Parfumerie — source : « AW Catalogue – Tous les produits ».
  *
  * Ajouter un produit : copiez une ligne p(...) et modifiez-la.
  *   p(référence, nom, actifs / bénéfices, format, prix (nombre ou null), univers, rubrique, labels)
@@ -11,7 +11,7 @@
 const AFFICHER_PRIX = true;
 
 const UNIVERS = {
-  brumes:  { nom: "Brumes Lush Cloud",   forme: "spray",  teinte: "#e7b48f", texte: "Sprays corps parfumés au complexe PUREYOUTH™ : hydratent, exfolient en douceur et parfument." },
+  brumes:  { nom: "Brumes corps",   forme: "spray",  teinte: "#e7b48f", texte: "Sprays corps parfumés au complexe PUREYOUTH™ : hydratent, exfolient en douceur et parfument." },
   corps:   { nom: "Corps & hygiène",     forme: "pump",   teinte: "#c9b6d9", texte: "Gels douche, crèmes, silhouette, déodorants, mains & pieds, savons, hygiène intime et dentaire." },
   visage:  { nom: "Visage",              forme: "jar",    teinte: "#e6cfa8", texte: "Crèmes, sérums, contours des yeux, nettoyants, toniques et masques." },
   rasage:  { nom: "Rasage",              forme: "tube",   teinte: "#8aa2b8", texte: "Crème à raser et soins après-rasage." },
@@ -42,13 +42,13 @@ function p(ref, nom, actifs, format, prix, univers, rubrique, labels) {
   PRODUITS.push({ ref, nom, actifs, format, prix, univers, rubrique, bio: labels.includes("B"), vegan: labels.includes("V") });
 }
 
-// ——— 1. Brumes corps Lush Cloud ———
+// ——— 1. Brumes corps ———
 const BRUMES = [
-  ["SBM001", "Tropical Breeze",  "Amande, pistache",          "Héliotrope, jasmin",       "Santal, caramel, vanille"],
-  ["SBM002", "Pacific Aura",     "Citron, passion, goyave",   "Jasmin, coco, pêche, rose", "Barbe à papa, framboise, musc, vanille"],
-  ["SBM003", "Golden Hour",      "Cassis, champagne, mandarine", "Coconut pie, coco, notes solaires", "Chocolat noir, lait, vanille"],
-  ["SBM004", "Summer Dream",     "Mangue, coco, pêche",       "Frangipanier",             "Santal, caramel, musc"],
-  ["SBM005", "Brazilian Sunset", "Bergamote, mandarine, orange", "Jasmin, coco, ylang-ylang", "Ambre, musc, vanille"]
+  ["SBM001", "Brise tropicale", "Amande, pistache",          "Héliotrope, jasmin",       "Santal, caramel, vanille"],
+  ["SBM002", "Aura du Pacifique", "Citron, passion, goyave",   "Jasmin, coco, pêche, rose", "Barbe à papa, framboise, musc, vanille"],
+  ["SBM003", "Heure dorée", "Cassis, champagne, mandarine", "Tarte à la noix de coco, coco, notes solaires", "Chocolat noir, lait, vanille"],
+  ["SBM004", "Rêve d'été", "Mangue, coco, pêche",       "Frangipanier",             "Santal, caramel, musc"],
+  ["SBM005", "Coucher de soleil brésilien", "Bergamote, mandarine, orange", "Jasmin, coco, ylang-ylang", "Ambre, musc, vanille"]
 ];
 BRUMES.forEach(([ref, nom, tete, coeur, fond]) => {
   p(ref, "Brume corps " + nom, "Complexe PUREYOUTH™ et glycérine · Hydrate, exfolie en douceur, antioxydant", "Spray", 19.90, "brumes", "Brumes corps", "");
@@ -77,7 +77,7 @@ p("CR17B", "Gel 98 % aloe vera",              "Avec hamamélis · Apaisant, cica
 
 p("BB03B", "Lait corporel bébé",              "Calendula, avoine, karité, aloe · Peaux délicates et irritées", "150 ml", 22.90, "corps", "Laits, brumes & crèmes corps", "B");
 p("AP04B", "Brume corporelle Noix de coco",   "Avec aloe vera", "100 ml", 12.90, "corps", "Laits, brumes & crèmes corps", "BV");
-p("AP07B", "Brume corporelle Fragrance 7",    "Avec aloe vera", "100 ml", 14.90, "corps", "Laits, brumes & crèmes corps", "");
+p("AP07B", "Brume corporelle Parfum 7",    "Avec aloe vera", "100 ml", 14.90, "corps", "Laits, brumes & crèmes corps", "");
 p("CR30B", "Crème corps Noix de coco",        "Jojoba, vitamine E, protéines de soie, argan", "150 ml", 23.90, "corps", "Laits, brumes & crèmes corps", "");
 p("CR34B", "Crème corps hydratante",          "Vitamine E, argan, amande douce, jojoba, aloe", "150 ml", 14.90, "corps", "Laits, brumes & crèmes corps", "");
 p("CR24B", "Crème corps nourrissante",        "Jojoba, karité, vitamine E, camomille, argan · Nourrissante et émolliente", "150 ml", 25.90, "corps", "Laits, brumes & crèmes corps", "");
@@ -102,7 +102,7 @@ p("BV06B", "Crème pieds réparatrice",         "Karité, avocat, olive, propoli
 p("CR19B", "Crème pieds rafraîchissante",     "Bouleau, calendula, romarin, menthol", "75 ml", 10.90, "corps", "Mains, pieds & ongles", "");
 p("CR29B", "Crème pieds apaisante karité",    "Karité, avocat, aloe, argan", "75 ml", null, "corps", "Mains, pieds & ongles", "");
 p("PS01B", "Déodorant spray pieds",           "Sauge, romarin, aloe · Anti-transpirant 24 h", "150 ml", 15.90, "corps", "Mains, pieds & ongles", "");
-p("GI42B", "Crème-gel mains hydroalcoolique", "Action rapide · Fragrance 42", "90 ml", 10.00, "corps", "Mains, pieds & ongles", "");
+p("GI42B", "Crème-gel mains hydroalcoolique", "Action rapide · Parfum 42", "90 ml", 10.00, "corps", "Mains, pieds & ongles", "");
 p("OLCB",  "Huile cuticules & ongles",        "6 huiles précieuses · Renforce les ongles", "8 ml", 11.90, "corps", "Mains, pieds & ongles", "");
 p("AR05B", "Crème mains bio",                 "Amande douce, protéines de soie, glycérine, camomille, argan · Nourrissante", "75 ml", 16.90, "corps", "Mains, pieds & ongles", "B");
 p("CR32B", "Crème mains bave d'escargot",     "Karité, amande douce, argan, bave d'escargot · Nourrissante", "75 ml", 17.90, "corps", "Mains, pieds & ongles", "");
@@ -132,7 +132,7 @@ p("LA06B", "Nettoyant intime lait d'ânesse",  "Sauge, mauve, romarin, karité, 
 p("BLK02B", "Dentifrice charbon actif",       "HE d'eucalyptus, charbon actif · Blanchissant", "75 ml", 12.90, "corps", "Hygiène bucco-dentaire", "V");
 p("BLK01B", "Soin blanchissant charbon",      "Blanchit et reminéralise, prévient le tartre", "115 g", 16.90, "corps", "Hygiène bucco-dentaire", "");
 p("CR33B",  "Dentifrice blanchissant",        "Propolis, xylitol, aloe · Anti-plaque", "115 g", 15.90, "corps", "Hygiène bucco-dentaire", "");
-p("AL04B",  "Dentifrice Sensitive",           "Calendula, camomille, aloe · Gencives hypersensibles", "80 ml", null, "corps", "Hygiène bucco-dentaire", "");
+p("AL04B",  "Dentifrice dents sensibles",           "Calendula, camomille, aloe · Gencives hypersensibles", "80 ml", null, "corps", "Hygiène bucco-dentaire", "");
 p("AL03B",  "Bain de bouche",                 "Tea tree, mauve, calendula, eucalyptus, aloe · Protège dents et gencives", "250 ml", null, "corps", "Hygiène bucco-dentaire", "");
 p("CR38B",  "Dentifrice",                     "Formule vegan", "115 g", 17.90, "corps", "Hygiène bucco-dentaire", "V");
 p("AL08B",  "Dentifrice – format voyage",     "Aloe vera", "30 g", 5.90, "corps", "Hygiène bucco-dentaire", "");
@@ -163,14 +163,14 @@ p("CR14B", "Lotion tonique douce",            "Camomille, mauve, avoine, calendu
 p("CR26B", "Lotion tonique purifiante",       "Bardane, sauge, ortie · Peaux impures", "150 ml", 18.00, "visage", "Nettoyants & toniques", "");
 
 p("AR07B",  "Masque anti-âge",                "Jojoba, pépins de raisin, karité, argan", "30 ml", 19.90, "visage", "Masques visage", "");
-p("POM01B", "Masque peel-off peaux matures",  "Protéines de soie, avoine, acide hyaluronique", "75 ml", 21.90, "visage", "Masques visage", "");
+p("POM01B", "Masque pelable peaux matures",  "Protéines de soie, avoine, acide hyaluronique", "75 ml", 21.90, "visage", "Masques visage", "");
 p("NM09B",  "Masque dermopurifiant",          "Argile verte, ortie, neem · Combat les imperfections", "50 ml", null, "visage", "Masques visage", "");
 p("AS01B",  "Masque purifiant",               "Sauge, citron, hamamélis, acide salicylique", "30 ml", 14.90, "visage", "Masques visage", "");
-p("AL11B",  "Masque peel-off peaux mixtes",   "Réglisse, enantia chlorantha, romarin, aloe", "75 ml", 18.90, "visage", "Masques visage", "");
+p("AL11B",  "Masque pelable peaux mixtes",   "Réglisse, enantia chlorantha, romarin, aloe", "75 ml", 18.90, "visage", "Masques visage", "");
 p("BV03B",  "Masque régénérant illuminateur", "Jojoba, raisin, vitamines C et E, réglisse, bave d'escargot", "50 ml", 13.90, "visage", "Masques visage", "");
 
 // ——— 4. Rasage ———
-p("CR10B",   "Crème à raser Velobarba",       "Aloe, glycérine, menthol · Hydrate, rafraîchit, prévient les irritations", "260 ml", 15.90, "rasage", "Rasage", "");
+p("CR10B",   "Crème à raser",       "Aloe, glycérine, menthol · Hydrate, rafraîchit, prévient les irritations", "260 ml", 15.90, "rasage", "Rasage", "");
 p("CRU003B", "Crème après-rasage",            "Panthénol, menthol, aloe · Anti-âge", "75 ml", 15.90, "rasage", "Rasage", "");
 p("CRU001B", "Crème après-rasage parfumée",   "Amande douce, aloe, hamamélis, panthénol · Parfum 1", "50 ml", 13.90, "rasage", "Rasage", "");
 
@@ -198,16 +198,16 @@ p("BV02B",  "Après-shampoing cheveux traités", "Amande douce, vitamine E, arga
 p("CAP26B", "Crème anti-taches de coloration", "Huile de lin · Protège lors des colorations", "100 ml", 19.90, "cheveux", "Masques & après-shampoings", "");
 
 p("CAP25B", "Sérum capillaire restructurant", "Vitamine E, lin, macadamia, argan · Démêle, brillance", "30 ml", null, "cheveux", "Sérums, brumes & sans rinçage", "");
-p("BV13B",  "Masque en spray leave-in 10 en 1", "Karité, argan, son de riz, soie, panthénol, bave d'escargot", "150 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
+p("BV13B",  "Masque en spray sans rinçage 10 en 1", "Karité, argan, son de riz, soie, panthénol, bave d'escargot", "150 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
 p("PC001B", "Brume cheveux Parfum 1",         "Brume parfumée pour les cheveux", "30 ml", 9.90, "cheveux", "Sérums, brumes & sans rinçage", "");
 p("PC007B", "Brume cheveux Parfum 7",         "Brume parfumée pour les cheveux", "30 ml", 9.90, "cheveux", "Sérums, brumes & sans rinçage", "");
 p("PC019B", "Brume cheveux Parfum 19",        "Brume parfumée pour les cheveux", "30 ml", 9.90, "cheveux", "Sérums, brumes & sans rinçage", "");
 p("PC023B", "Brume cheveux Parfum 23",        "Brume parfumée pour les cheveux", "30 ml", 9.90, "cheveux", "Sérums, brumes & sans rinçage", "");
 p("PC042B", "Brume cheveux Parfum 42",        "Brume parfumée pour les cheveux", "30 ml", 9.90, "cheveux", "Sérums, brumes & sans rinçage", "");
-p("CAP20B", "Light Drops Parfum 7",           "Lin, kératine, acide hyaluronique, soie", "50 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
-p("CAP21B", "Light Drops Parfum 10",          "Lin, kératine, acide hyaluronique, soie", "50 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
-p("CAP22B", "Light Drops Parfum 23",          "Lin, kératine, acide hyaluronique, soie", "50 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
-p("CAP23B", "Light Drops Parfum 42",          "Lin, kératine, acide hyaluronique, soie", "50 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
+p("CAP20B", "Gouttes de lumière Parfum 7",           "Lin, kératine, acide hyaluronique, soie", "50 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
+p("CAP21B", "Gouttes de lumière Parfum 10",          "Lin, kératine, acide hyaluronique, soie", "50 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
+p("CAP22B", "Gouttes de lumière Parfum 23",          "Lin, kératine, acide hyaluronique, soie", "50 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
+p("CAP23B", "Gouttes de lumière Parfum 42",          "Lin, kératine, acide hyaluronique, soie", "50 ml", 29.90, "cheveux", "Sérums, brumes & sans rinçage", "");
 
 p("FA01B",  "Soin intensif anti-chute (10 ampoules)", "Arnica, kigelia, ginseng, cannelle, sauge, soie · Stimule la croissance", "10 × 3 ml", 48.00, "cheveux", "Anti-chute", "");
 p("FA02B",  "Lotion anti-chute 8 plantes",    "Serenoa, capsicum, sauge, romarin, ginkgo, ortie, kigelia, cannelle", "50 ml", 50.00, "cheveux", "Anti-chute", "");
@@ -220,9 +220,9 @@ p("SOL02B", "Spray solaire SPF 30",           "Aloe, vitamine E, panthénol, ham
 p("SOL03B", "Spray solaire SPF 15",           "Aloe, vitamine E, panthénol, hamamélis · Résiste à l'eau, UVA + UVB", "150 ml", 29.90, "solaire", "Soins solaires", "");
 p("SOL05B", "Gel après-soleil",               "Eucalyptus, aloe, panthénol, menthol · Rafraîchissant", "150 ml", 19.90, "solaire", "Soins solaires", "");
 p("SOL04B", "Huile solaire super bronzante",  "Argan, vitamine E, brou de noix, millepertuis", "150 ml", 15.90, "solaire", "Soins solaires", "");
-p("SOL25",  "Spray rafraîchissant bronzant Ice Effect", "Complexe 2BRONZE™", "100 ml", 29.90, "solaire", "Soins solaires", "");
-p("SOL21",  "Glitterain shimmer body spray Monoï & lait", "Acide hyaluronique, aloe", "150 ml", 24.90, "solaire", "Soins solaires", "");
-p("SOL22",  "Glitterain shimmer body spray Noix de coco", "Acide hyaluronique, aloe", "150 ml", 24.90, "solaire", "Soins solaires", "");
+p("SOL25",  "Spray rafraîchissant bronzant effet glace", "Complexe 2BRONZE™", "100 ml", 29.90, "solaire", "Soins solaires", "");
+p("SOL21",  "Spray corps scintillant Monoï & lait", "Acide hyaluronique, aloe", "150 ml", 24.90, "solaire", "Soins solaires", "");
+p("SOL22",  "Spray corps scintillant Noix de coco", "Acide hyaluronique, aloe", "150 ml", 24.90, "solaire", "Soins solaires", "");
 p("SOL27",  "Spray apaisant après-soleil",    "Complexe SUNRELIEF™ · Émollient", "150 ml", 19.90, "solaire", "Soins solaires", "");
 p("SOL26",  "Spray capillaire protecteur",    "SHINEJUICE™ + filtres · Protège du chlore et du sel", "150 ml", 25.90, "solaire", "Soins solaires", "");
 p("SOL24",  "Spray capillaire biphasé régénérant", "GLOSSY DEEP™ · Anti-frisottis, protège la couleur", "150 ml", 19.90, "solaire", "Soins solaires", "");
@@ -234,7 +234,7 @@ p("MD05B", "Pommade balsamique",              "Eucalyptus, romarin, menthol, cam
 p("MD01B", "Pommade à l'ichtyol 9,8 %",       "Contre boutons, infections et abcès", "30 ml", null, "remedes", "Pommades & remèdes", "");
 p("MD03B", "Gel apaisant brûlures",           "Neem, aloe, calendula, mimosa", "50 ml", 13.90, "remedes", "Pommades & remèdes", "");
 p("CR23B", "Spray premiers soins",            "Camomille, 98 % aloe · Apaisant et réparateur", "150 ml", 16.90, "remedes", "Pommades & remèdes", "");
-p("AD02B", "Soin Remedy Complex",             "Soin multi-usage", "50 ml", 23.90, "remedes", "Pommades & remèdes", "BV");
+p("AD02B", "Soin réparateur multi-usage",      "Formule complète pour les petits maux", "50 ml", 23.90, "remedes", "Pommades & remèdes", "BV");
 
 // ——— 8. Animaux ———
 p("AN01B", "Shampoing pour chien",            "Neem, aloe · Antibactérien et antiparasite (pas pour pelage blanc)", "250 ml", 13.90, "animaux", "Animaux", "");
