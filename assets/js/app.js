@@ -26,7 +26,7 @@
   function ligneParfum(p) {
     const i = PARFUMS.indexOf(p);
     const prix = (p.gamme === "luxe" || p.gamme === "luxury") ? '<span class="p-price">' + euros(p.prixGrand) + ' · ' + euros(p.prix15) + '</span>' : '';
-    return '<li><button class="p-item" data-p="' + i + '"><span class="p-name">' + echapper(p.nom) +
+    return '<li><button class="p-item" id="parfum-' + i + '" data-p="' + i + '"><span class="p-name">' + echapper(p.nom) +
       (p.famille ? '<span class="p-fam">' + echapper(p.famille) + '</span>' : '') + '</span>' +
       '<span class="p-ref">' + echapper(p.ref) + '</span>' + prix + '</button></li>';
   }
@@ -38,7 +38,7 @@
     const liste = PARFUMS.filter((p) =>
       (pFiltre.genre === "Tous" || p.genre === pFiltre.genre) &&
       (pFiltre.gamme === "toutes" || p.gamme === pFiltre.gamme) &&
-      (!q || sansAccent(p.nom + " " + p.ref + " " + (p.ref15 || "") + " " + (p.famille || "")).includes(q)));
+      (!q || sansAccent([p.nom, p.ref, p.ref15, p.famille, p.inspiration].filter(Boolean).join(" ")).includes(q)));
     const groupes = [];
     Object.keys(GAMMES).forEach((gamme) => {
       const genres = (gamme === "creation" || gamme === "enfant") ? [null] : ["Femme", "Homme", "Mixte"];
@@ -123,12 +123,12 @@
       (filtre.univers === "tout" || p.univers === filtre.univers) &&
       (filtre.rubrique === "toutes" || p.rubrique === filtre.rubrique) &&
       (!bio || p.bio) && (!vegan || p.vegan) &&
-      (!q || sansAccent([p.ref, p.nom, p.actifs, p.rubrique].join(" ")).includes(q)));
+      (!q || sansAccent([p.ref, p.nom, p.actifs, p.rubrique, p.inspiration].filter(Boolean).join(" ")).includes(q)));
     document.querySelectorAll("#chips .chip").forEach((b) => b.classList.toggle("active", b.dataset.cat === filtre.univers));
     $("#count").textContent = liste.length + " soin" + (liste.length > 1 ? "s" : "");
     $("#productGrid").innerHTML = liste.length ? liste.map((p) => {
       const u = UNIVERS[p.univers];
-      return '<article class="card" tabindex="0" data-i="' + parRef[p.ref] + '">' +
+      return '<article class="card" id="soin-' + parRef[p.ref] + '" tabindex="0" data-i="' + parRef[p.ref] + '">' +
         '<div class="card-visual" style="--tint:' + u.teinte + '">' + visuel(u.forme, u.teinte) + '<span class="card-tags">' + labels(p) + '</span></div>' +
         '<div class="card-body"><span class="card-cat">' + echapper(p.rubrique) + '</span>' +
         '<h3>' + echapper(p.nom) + '</h3><p>' + echapper(p.actifs) + '</p>' +
@@ -161,9 +161,10 @@
       '<span class="card-cat">' + echapper(u.nom) + ' · ' + echapper(p.rubrique) + '</span><h3 id="modalTitle">' + echapper(p.nom) + '</h3>' +
       '<div class="modal-tags">' + labels(p) + '</div><dl>' + ligne("Actifs", p.actifs) +
       (p.notes ? ligne("Tête", p.notes.tete) + ligne("Cœur", p.notes.coeur) + ligne("Fond", p.notes.fond) : '') +
-      ligne("Format", p.format) + (AFFICHER_PRIX ? ligne("Prix indicatif", euros(p.prix), true) : '') + '</dl>' +
-      '<p class="modal-ref">Référence ' + echapper(p.ref) + '</p>' +
-      '<a href="#contact" class="btn btn-plum modal-cta">Demander un conseil</a>');
+      ligne("Inspiration", p.inspiration) + ligne("Format", p.format) + (AFFICHER_PRIX ? ligne("Prix indicatif", euros(p.prix), true) : '') + '</dl>' +
+      '<div class="add-row"><button class="btn btn-plum btn-add" data-add="s:' + i + ':' + echapper(p.format) + '">Ajouter au panier</button>' +
+      '<a href="#contact" class="btn btn-line btn-add modal-cta">Demander un conseil</a></div>' +
+      '<p class="modal-ref">Référence ' + echapper(p.ref) + '</p>');
   }
 
   function ouvrirParfum(i) {
@@ -171,14 +172,15 @@
     const formats = ligne(p.grand, AFFICHER_PRIX ? euros(p.prixGrand) + (p.gamme === "classique" ? " (hors frais de port)" : "") : "Disponible", true) +
       (p.ref15 ? ligne("15 ml", AFFICHER_PRIX ? euros(p.prix15) : "Disponible", true) : "");
     montrer('<span class="card-cat g-' + p.genre + '">' + echapper(p.genre) + ' · ' + echapper(g.nom) + '</span>' +
-      '<h3 id="modalTitle">' + echapper(p.nom) + '</h3><dl>' + ligne("Famille", p.famille) + formats + '</dl>' +
-      '<p class="modal-ref">Référence ' + echapper(p.ref) + (p.ref15 ? ' · 15 ml : ' + echapper(p.ref15) : '') + '</p>' +
-      '<a href="#contact" class="btn btn-plum modal-cta">Demander ce parfum</a>');
+      '<h3 id="modalTitle">' + echapper(p.nom) + '</h3><dl>' + ligne("Famille", p.famille) + ligne("Inspiration", p.inspiration) + formats + '</dl>' +
+      '<div class="add-row"><button class="btn btn-plum btn-add" data-add="p:' + i + ':' + p.grand + '">Ajouter ' + p.grand + '</button>' +
+      (p.ref15 ? '<button class="btn btn-line btn-add" data-add="p:' + i + ':15 ml">Ajouter 15 ml</button>' : '') + '</div>' +
+      '<p class="modal-ref">Référence ' + echapper(p.ref) + (p.ref15 ? ' · 15 ml : ' + echapper(p.ref15) : '') + '</p>');
   }
 
   function fermer() { modal.hidden = true; document.body.style.overflow = ""; }
   document.addEventListener("click", (e) => {
-    if (modal.contains(e.target)) return;
+    if (modal.contains(e.target) || e.target.closest(".drawer, .finder")) return;
     const s = e.target.closest(".card, .mist, .step");
     if (s) return ouvrirSoin(+s.dataset.i);
     const p = e.target.closest(".p-item");
@@ -187,6 +189,133 @@
   $("#productGrid").addEventListener("keydown", (e) => { const c = e.target.closest(".card"); if (c && e.key === "Enter") ouvrirSoin(+c.dataset.i); });
   modal.addEventListener("click", (e) => { if (e.target === modal || e.target.closest(".modal-close") || e.target.closest(".modal-cta")) fermer(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) fermer(); });
+
+  // ——— Recherche directe (nom ou inspiration) ———
+  const INDEX = PARFUMS.map((p, i) => ({ type: "p", i, nom: p.nom, meta: p.genre + " · " + GAMMES[p.gamme].nom, inspiration: p.inspiration, ref: p.ref + " " + (p.ref15 || "") }))
+    .concat(PRODUITS.map((p, i) => ({ type: "s", i, nom: p.nom, meta: UNIVERS[p.univers].nom + " · " + p.rubrique, inspiration: p.inspiration, ref: p.ref })));
+  INDEX.forEach((x) => { x.cleNom = sansAccent(x.nom); x.cleInsp = sansAccent(x.inspiration || ""); x.cleRef = sansAccent(x.ref); });
+  const finder = $("#finder"), fList = $("#finderList");
+  let resultats = [], choisi = 0;
+
+  function chercher(q) {
+    q = sansAccent(q.trim());
+    if (q.length < 2) return [];
+    const score = (x) => {
+      const insp = x.cleInsp.split(" · ")[0];
+      if (x.cleNom === q) return 0;
+      if (insp === q) return 1;
+      if (x.cleNom.startsWith(q)) return 2;
+      if (insp.startsWith(q)) return 3;
+      if (x.cleNom.includes(q)) return 4;
+      if (x.cleInsp.includes(q)) return 5;
+      return x.cleRef.includes(q) ? 6 : 9;
+    };
+    return INDEX.map((x) => [score(x), x]).filter(([s]) => s < 9).sort((a, b) => a[0] - b[0] || (a[1].type === "p" ? -1 : 1)).slice(0, 8).map(([, x]) => x);
+  }
+  function montrerResultats() {
+    resultats = chercher(finder.value);
+    choisi = 0;
+    if (finder.value.trim().length < 2) { fList.hidden = true; finder.setAttribute("aria-expanded", "false"); return; }
+    fList.innerHTML = resultats.length ? resultats.map((x, k) =>
+      '<li role="option" data-k="' + k + '" aria-selected="' + (k === 0) + '"><span class="f-name">' + echapper(x.nom) + '</span>' +
+      '<span class="f-meta">' + echapper(x.meta) + (x.inspiration ? ' · inspiration <b>' + echapper(x.inspiration) + '</b>' : '') + '</span></li>'
+    ).join("") : '<li class="finder-empty">Aucun produit trouvé. Essayez un autre nom ou une autre inspiration.</li>';
+    fList.hidden = false;
+    finder.setAttribute("aria-expanded", "true");
+  }
+  function allerA(x) {
+    fList.hidden = true;
+    finder.value = "";
+    finder.blur();
+    if (x.type === "p") {
+      pFiltre.genre = "Tous"; pFiltre.gamme = "toutes"; $("#pSearch").value = ""; afficherParfums();
+    } else {
+      $("#search").value = ""; $("#fBio").checked = $("#fVegan").checked = false; choisirUnivers("tout");
+    }
+    const el = document.getElementById((x.type === "p" ? "parfum-" : "soin-") + x.i);
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.add("flash");
+    setTimeout(() => el.classList.remove("flash"), 3300);
+    setTimeout(() => (x.type === "p" ? ouvrirParfum : ouvrirSoin)(x.i), 650);
+  }
+  finder.addEventListener("input", montrerResultats);
+  finder.addEventListener("keydown", (e) => {
+    if (fList.hidden || !resultats.length) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      choisi = (choisi + (e.key === "ArrowDown" ? 1 : resultats.length - 1)) % resultats.length;
+      fList.querySelectorAll("li").forEach((li, k) => li.setAttribute("aria-selected", k === choisi));
+    } else if (e.key === "Enter") { e.preventDefault(); allerA(resultats[choisi]); }
+    else if (e.key === "Escape") fList.hidden = true;
+  });
+  fList.addEventListener("mousedown", (e) => { const li = e.target.closest("li[data-k]"); if (li) { e.preventDefault(); allerA(resultats[+li.dataset.k]); } });
+  finder.addEventListener("blur", () => setTimeout(() => (fList.hidden = true), 150));
+  finder.addEventListener("focus", () => { if (finder.value.trim().length >= 2) montrerResultats(); });
+
+  // ——— Panier (simulation, aucun achat) ———
+  const CLE = "aw-panier";
+  let panier = [];
+  try { panier = JSON.parse(localStorage.getItem(CLE)) || []; } catch (e) { panier = []; }
+  const sauver = () => { try { localStorage.setItem(CLE, JSON.stringify(panier)); } catch (e) { /* stockage indisponible : le panier reste en mémoire */ } };
+
+  function detail(it) {
+    if (it.type === "p") {
+      const p = PARFUMS[it.i];
+      const est15 = it.format === "15 ml";
+      return { nom: p.nom, ref: est15 ? p.ref15 : p.ref, prix: est15 ? p.prix15 : p.prixGrand };
+    }
+    const p = PRODUITS[it.i];
+    return { nom: p.nom, ref: p.ref.split(" ")[0], prix: p.prix };
+  }
+  function ajouter(code) {
+    const [type, i, format] = code.split(":");
+    const it = panier.find((x) => x.type === type && x.i === +i && x.format === format);
+    if (it) it.qte++; else panier.push({ type, i: +i, format, qte: 1 });
+    sauver(); dessinerPanier();
+    toast("« " + detail({ type, i: +i, format }).nom + " » ajouté au panier");
+  }
+  let minuterie;
+  function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(minuterie); minuterie = setTimeout(() => (el.hidden = true), 2200); }
+
+  function dessinerPanier() {
+    const n = panier.reduce((s, x) => s + x.qte, 0);
+    $("#cartCount").textContent = n;
+    let total = 0, surDemande = false;
+    $("#cartList").innerHTML = panier.length ? panier.map((it, k) => {
+      const d = detail(it);
+      if (d.prix == null) surDemande = true; else total += d.prix * it.qte;
+      return '<li class="cart-item"><span class="ci-name">' + echapper(d.nom) + '</span>' +
+        '<span class="ci-price">' + (d.prix == null ? "Sur demande" : euros(Math.round(d.prix * it.qte * 100) / 100)) + '</span>' +
+        '<span class="ci-meta">' + echapper(it.format) + ' · réf. ' + echapper(d.ref) + '</span>' +
+        '<span class="ci-qty"><button data-q="' + k + ':-1" aria-label="Retirer un">−</button><span>' + it.qte + '</span><button data-q="' + k + ':1" aria-label="Ajouter un">+</button></span></li>';
+    }).join("") : '<li class="cart-empty">Votre panier est vide.<br />Ouvrez la fiche d\'un produit pour l\'ajouter.</li>';
+    if (!panier.length) { $("#cartFoot").innerHTML = ""; return; }
+    const lignes = panier.map((it) => { const d = detail(it); return "- " + d.nom + " (" + it.format + ", réf. " + d.ref + ") x" + it.qte; });
+    const corps = "Bonjour,\n\nVoici ma sélection :\n" + lignes.join("\n") + "\n\nTotal estimé : " + euros(Math.round(total * 100) / 100) + (surDemande ? " (+ articles sur demande)" : "") + "\n\nMerci !";
+    $("#cartFoot").innerHTML = '<div class="total"><span>Total estimé</span><strong>' + euros(Math.round(total * 100) / 100) + '</strong></div>' +
+      '<p class="foot-note">Hors frais de port' + (surDemande ? ", hors articles dont le prix est sur demande" : "") + '. Ce total est une estimation : aucun paiement n\'est possible ici.</p>' +
+      '<a class="btn btn-plum" href="mailto:kururo.f@gmail.com?subject=' + encodeURIComponent("Ma sélection AW Parfumerie") + '&body=' + encodeURIComponent(corps) + '">Envoyer ma sélection par e-mail</a>' +
+      '<button class="link-btn" id="cartClear">Vider le panier</button>';
+  }
+  const drawer = $("#drawer"), drawerBg = $("#drawerBg");
+  function ouvrirPanier() { drawer.hidden = drawerBg.hidden = false; document.body.style.overflow = "hidden"; $("#drawerClose").focus(); }
+  function fermerPanier() { drawer.hidden = drawerBg.hidden = true; document.body.style.overflow = ""; }
+  $("#cartBtn").addEventListener("click", ouvrirPanier);
+  $("#drawerClose").addEventListener("click", fermerPanier);
+  drawerBg.addEventListener("click", fermerPanier);
+  drawer.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-q]");
+    if (b) {
+      const [k, d] = b.dataset.q.split(":").map(Number);
+      panier[k].qte += d;
+      if (panier[k].qte <= 0) panier.splice(k, 1);
+      sauver(); dessinerPanier();
+    }
+    if (e.target.id === "cartClear") { panier = []; sauver(); dessinerPanier(); }
+  });
+  modal.addEventListener("click", (e) => { const b = e.target.closest("[data-add]"); if (b) { ajouter(b.dataset.add); fermer(); } });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !drawer.hidden) fermerPanier(); });
+  dessinerPanier();
 
   // Menu mobile
   const toggle = $(".menu-toggle");

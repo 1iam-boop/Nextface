@@ -1,6 +1,6 @@
 # AW Parfumerie
 
-Site vitrine (sans boutique) : liste des parfums (femme, homme, mixte, luxe, luxury, créations, enfants), étuis, et soins corps, visage, rasage, cheveux, solaire, remèdes, animaux.
+Site vitrine (sans paiement, panier de simulation uniquement) : recherche directe par nom ou inspiration, liste des parfums (femme, homme, mixte, luxe, luxury, créations, enfants), étuis, et soins corps, visage, rasage, cheveux, solaire, remèdes, animaux.
 
 - `index.html` : la vitrine
 - `assets/js/parfums.js` : **la liste des parfums** (une ligne = référence + nom ; prix à la fin pour Luxe et Luxury)

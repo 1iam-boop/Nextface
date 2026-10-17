@@ -14,6 +14,11 @@
 
   <header class="topbar">
     <a href="#accueil" class="brand"><span class="script">AW</span> Parfumerie</a>
+    <div class="finder" role="search">
+      <input type="search" id="finder" placeholder="Nom du produit ou inspiration…" aria-label="Rechercher un produit par son nom ou son inspiration" autocomplete="off" aria-controls="finderList" aria-expanded="false" />
+      <ul class="finder-list" id="finderList" role="listbox" hidden></ul>
+    </div>
+    <button class="cart-btn" id="cartBtn" aria-label="Ouvrir le panier">Panier <span class="cart-count" id="cartCount">0</span></button>
     <button class="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">Menu</button>
     <nav class="nav">
       <a href="#parfums">Parfums</a>
@@ -25,8 +30,8 @@
   </header>
 
   <section id="accueil" class="hero">
-    <p class="script hero-title">AW Parfumerie</p>
-    <p class="hero-sub">Parfums femme, homme &amp; mixte · Soins du corps, du visage et des cheveux</p>
+    <h1 class="hero-title"><span class="script">AW</span><span class="hero-word">Parfumerie</span></h1>
+    <p class="hero-sub">Parfums femme, homme &amp; mixte, et soins du corps, du visage et des cheveux.</p>
     <div class="blobs">
       <a href="#parfums" class="blob blob-a"><strong>35 €</strong><span>les 70 ml</span></a>
       <a href="#parfums" class="blob blob-b"><strong>11,90 €</strong><span>les 15 ml</span></a>
@@ -104,8 +109,22 @@
   <footer class="footer">
     <p class="script footer-logo">AW Parfumerie</p>
     <p>Les parfums ouverts ne sont ni repris, ni échangés.</p>
-    <p class="legal">Site vitrine : aucune vente en ligne. Prix indicatifs, susceptibles d'évoluer.</p>
+    <p class="legal">Site vitrine : aucune vente en ligne, le panier est une simple simulation. Prix indicatifs, susceptibles d'évoluer.</p>
+    <p class="legal">Nos produits sont créés en s'inspirant de parfums célèbres. Toute référence à des marques ou à des noms est utilisée uniquement de façon descriptive, pour identifier les fragrances. Les marques citées appartiennent à leurs propriétaires. Il ne s'agit ni de copies, ni de contrefaçons.</p>
   </footer>
+
+  <div class="drawer-bg" id="drawerBg" hidden></div>
+  <aside class="drawer" id="drawer" aria-label="Panier" hidden>
+    <div class="drawer-head">
+      <h2 class="script">Mon panier</h2>
+      <button class="modal-close" id="drawerClose" aria-label="Fermer le panier">×</button>
+    </div>
+    <p class="sim-note">Simulation uniquement : aucun paiement n'est possible sur ce site.</p>
+    <ul class="cart-list" id="cartList"></ul>
+    <div class="drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" hidden></div>
 
   <div class="modal" id="modal" hidden>
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">

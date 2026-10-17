@@ -75,3 +75,38 @@ const ETUIS = [
   { ref: "TCOV009", nom: "Étui chocolat", couleur: "#4a3a32", prix: 15 },
   { ref: "TCOV008", nom: "Étui bordeaux", couleur: "#6e2a28", prix: 15 }
 ];
+
+// Inspirations (usage uniquement descriptif, pour identifier les fragrances) : référence → « Parfum · Marque »
+const INSPIRATIONS = {
+  "006W": "Opium · YSL", "007W": "J'adore · Dior", "010W": "Alien · Thierry Mugler", "011W": "Light Blue · D&G", "151W": "Guilty · Gucci",
+  "014W": "Manifesto · YSL", "019W": "Lady Million · Paco Rabanne", "023W": "Hypnotic Poison · Dior", "024W": "N°5 · Chanel", "025W": "For Her · Narciso Rodriguez",
+  "026W": "Flower · Kenzo", "027W": "Trésor · Lancôme", "028W": "Angel · Thierry Mugler", "029W": "L'Eau d'Issey · Issey Miyake", "039W": "Miss Dior Chérie · Dior",
+  "040W": "Hypnôse · Lancôme", "153W": "Chloé · Chloé", "042W": "La Vie est Belle · Lancôme", "154W": "Love Chloé · Chloé", "047W": "Crystal Noir · Versace",
+  "049W": "Dolce · D&G", "051W": "Coco Mademoiselle · Chanel", "053W": "Narciso · Narciso Rodriguez", "055W": "Black Opium · YSL", "056W": "Ange ou Démon · Givenchy",
+  "057W": "Omnia Amethyste · Bvlgari", "156W": "Hugo · Hugo Boss", "064W": "Omnia Indian Garnet · Bvlgari", "067W": "Olympéa · Paco Rabanne", "070W": "The One · D&G",
+  "071W": "Allure · Chanel", "076W": "Acqua di Gioia · Armani", "158W": "Flora · Gucci", "080W": "Sì · Armani", "081W": "Classique Essence · Jean Paul Gaultier",
+  "082W": "Signorina · Ferragamo", "085W": "Chance · Chanel", "089W": "Mon Paris · YSL", "090W": "Poison Girl · Dior", "159W": "Burberry Women · Burberry",
+  "096W": "Gabrielle · Chanel", "097W": "Amo · Ferragamo", "098W": "Joy · Dior", "115W": "Idôle · Lancôme", "116W": "Yes I Am · Cacharel",
+  "119W": "Scandal · Jean Paul Gaultier", "120W": "La Petite Robe Noire, édition « Ma Robe Velours » · Guerlain", "121W": "L'Interdit · Givenchy", "133W": "Paradoxe · Prada",
+  "145W": "Devotion · D&G", "148W": "Goddess · Burberry", "161W": "Born in Roma Intense · Valentino",
+  "001M": "One Million · Paco Rabanne", "002M": "Acqua di Giò · Armani", "003M": "Fahrenheit · Dior", "004M": "The One · D&G", "150M": "Hugo · Hugo Boss",
+  "012M": "Eau Sauvage · Dior", "015M": "Roma · Laura Biagiotti", "016M": "Le Mâle · Jean Paul Gaultier", "152M": "Guilty · Gucci", "018M": "Déclaration · Cartier",
+  "020M": "La Nuit de l'Homme · YSL", "021M": "Light Blue · D&G", "022M": "Terre d'Hermès · Hermès", "030M": "Black XS · Paco Rabanne", "032M": "Spicebomb · Viktor & Rolf",
+  "033M": "Black Code · Armani", "037M": "Man · Bvlgari", "038M": "Bleu · Chanel", "048M": "Allure Homme · Chanel", "160M": "Burberry for Men · Burberry",
+  "052M": "Pasha · Cartier", "061M": "Invictus · Paco Rabanne", "062M": "Intenso · D&G", "157M": "The Scent · Hugo Boss", "069M": "Acqua di Sale · Profumum Roma",
+  "079M": "MYSLF · YSL", "084M": "Dylan Blue · Versace", "086M": "Legend · Montblanc", "087M": "Wanted · Azzaro", "088M": "Man in Black · Bvlgari",
+  "091M": "Chrome · Azzaro", "140M": "Eros · Versace", "147M": "Bottled Absolu · Hugo Boss", "162M": "Born in Roma Intense · Valentino",
+  "155U": "CK One · Calvin Klein", "054U": "Black Orchid · Tom Ford", "072U": "Patchouli · Reminiscence", "100U": "White Aoud · Montale", "105U": "Intense Café · Montale",
+  "093W": "Aventus for Her · Creed", "122W": "Libre · YSL", "131W": "Good Girl · Carolina Herrera", "132W": "My Way · Armani", "163W": "Miutine · Miu Miu",
+  "068M": "Aventus · Creed", "094M": "Sauvage · Dior", "113M": "Sur la Route · Louis Vuitton", "136M": "Dior Homme Intense · Dior", "164M": "Paradigme · Prada",
+  "044U": "Silver Mountain Water · Creed", "073U": "Himalaya · Creed", "099U": "Mandarino di Amalfi · Tom Ford", "110U": "Kirke · Tiziana Terenzi",
+  "114U": "Ombre Nomade · Louis Vuitton", "135U": "Bois d'Argent · Dior", "142U": "Ombre Leather · Tom Ford",
+  "109W": "J'adore L'Or · Dior", "123W": "Good Girl Gone Bad · Kilian", "074M": "Black Afgano · Nasomatto", "075M": "X for Men · Clive Christian",
+  "101U": "Velvet Amber Skin · D&G", "102U": "Velvet Amber Sun · D&G", "106U": "Fucking Fabulous · Tom Ford", "111U": "Lost Cherry · Tom Ford",
+  "112U": "Neroli Portofino · Tom Ford", "117U": "Tobacco Vanille · Tom Ford", "118U": "Baccarat Rouge 540 · Maison Francis Kurkdjian", "124U": "Zeta · Morph",
+  "125U": "Sole di Positano Acqua · Tom Ford", "126U": "Soleil Blanc · Tom Ford", "127U": "Oud Wood · Tom Ford", "128U": "Vanille Fatale · Tom Ford",
+  "129U": "Erba Pura · Xerjoff", "130U": "Megamare · Orto Parisi", "134U": "Bitter Peach · Tom Ford", "137U": "XJ 1861 Naxos · Xerjoff",
+  "138U": "Wood Whisper · Ojar", "139U": "Les Sables Roses · Louis Vuitton", "141U": "Turath · The Spirit of Dubai", "143U": "Vanilla Powder · Matière Première",
+  "144U": "Bianco Latte · Giardini di Toscana", "146U": "Rouge · Pierre Balmain"
+};
+PARFUMS.forEach((p) => { if (INSPIRATIONS[p.ref]) p.inspiration = INSPIRATIONS[p.ref]; });

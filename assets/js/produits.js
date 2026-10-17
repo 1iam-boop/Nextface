@@ -242,3 +242,13 @@ p("AN02B", "Spray répulsif anti-tiques chien", "Neem, HE thym rouge, aloe (pas 
 p("AN03",  "Nettoyant auriculaire chien & chat", "Tea tree, amande douce, carthame", "100 ml", 12.99, "animaux", "Animaux", "");
 p("AN04",  "Parfum chiens & chats Kiwi-mangue", "Avoine, ylang-ylang, melaleuca, menthe", "150 ml", 19.99, "animaux", "Animaux", "");
 p("AN05",  "Parfum chiens & chats Talc",      "Avoine, ylang-ylang, tea tree, menthe", "150 ml", 19.99, "animaux", "Animaux", "");
+
+// Inspirations des soins parfumés (usage uniquement descriptif)
+const INSPIRATIONS_SOINS = {
+  SBM001: "Brazilian Crush · Sol de Janeiro", SBM002: "Bikini Season · Sol de Janeiro", SBM003: "Summer e Amor · Sol de Janeiro",
+  SBM004: "Beijos de Sol · Sol de Janeiro", SBM005: "Rio Radiance · Sol de Janeiro",
+  AP07B: "J'adore · Dior", GI42B: "La Vie est Belle · Lancôme", CRU001B: "One Million · Paco Rabanne",
+  PC001B: "One Million · Paco Rabanne", PC007B: "J'adore · Dior", PC019B: "Lady Million · Paco Rabanne", PC023B: "Hypnotic Poison · Dior",
+  PC042B: "La Vie est Belle · Lancôme", CAP20B: "J'adore · Dior", CAP21B: "Alien · Thierry Mugler", CAP22B: "Hypnotic Poison · Dior", CAP23B: "La Vie est Belle · Lancôme"
+};
+PRODUITS.forEach((p) => { if (INSPIRATIONS_SOINS[p.ref]) p.inspiration = INSPIRATIONS_SOINS[p.ref]; });
