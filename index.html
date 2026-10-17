@@ -2,113 +2,133 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vitrine Chogan</title>
-  <meta name="description" content="Vitrine des produits Chogan : parfums, soins, maison et bien-être. Site de présentation, sans vente en ligne." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AW Parfumerie</title>
+  <meta name="description" content="AW Parfumerie : parfums femme, homme et mixte, et soins corps, visage, cheveux et solaires. Site vitrine, sans vente en ligne." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Mrs+Saint+Delafield&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/vitrine.css" />
 </head>
 <body>
 
   <header class="topbar">
-    <a href="#accueil" class="brand">
-      <span class="brand-mark">C</span>
-      <span class="brand-name">Chogan<small>Vitrine</small></span>
-    </a>
-    <button class="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+    <a href="#accueil" class="brand"><span class="script">AW</span> Parfumerie</a>
     <nav class="nav">
-      <a href="#univers">Univers</a>
-      <a href="#parfums">Parfums</a>
-      <a href="#catalogue">Catalogue</a>
-      <a href="#maison">La Maison</a>
+      <a href="#best-sellers">Best-sellers</a>
+      <a href="#categories">Catégories</a>
+      <a href="#ingredients">Ingrédients</a>
+      <a href="#routines">Routines</a>
+      <a href="#histoire">Notre histoire</a>
       <a href="#contact">Contact</a>
     </nav>
+    <div class="tools">
+      <button class="icon-btn" id="searchBtn" aria-label="Rechercher un produit" aria-expanded="false" aria-controls="searchPanel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /></svg>
+      </button>
+      <button class="icon-btn" id="cartBtn" aria-label="Ouvrir le panier">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z" /><path d="M9 8V6.5a3 3 0 0 1 6 0V8" /></svg>
+        <span class="cart-count" id="cartCount" hidden>0</span>
+      </button>
+      <button class="icon-btn menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+      </button>
+    </div>
+    <div class="search-panel" id="searchPanel" role="search" hidden>
+      <input type="search" id="finder" placeholder="Nom du produit ou inspiration (ex. Addiction, Opium…)" aria-label="Rechercher un produit par son nom ou son inspiration" autocomplete="off" aria-controls="finderList" />
+      <ul class="finder-list" id="finderList" role="listbox" hidden></ul>
+    </div>
   </header>
 
   <section id="accueil" class="hero">
-    <div class="hero-inner">
-      <p class="eyebrow">Made in Italy · depuis 2013</p>
-      <h1>L'excellence olfactive<br /><em>à l'italienne</em></h1>
-      <p class="lead">Découvrez l'univers Chogan : parfums, soins du visage et du corps, cheveux, maison et bien-être. Une vitrine pour explorer — pas de panier, pas de paiement.</p>
-      <div class="hero-cta">
-        <a href="#catalogue" class="btn btn-gold">Explorer le catalogue</a>
-        <a href="#contact" class="btn btn-ghost">Demander un conseil</a>
-      </div>
-    </div>
-    <div class="hero-bottles" aria-hidden="true">
-      <span class="bottle b1"></span><span class="bottle b2"></span><span class="bottle b3"></span>
+    <h1 class="hero-title"><span class="script">AW</span><span class="hero-word">Parfumerie</span></h1>
+    <p class="hero-sub">Parfums femme, homme &amp; mixte, et soins du corps, du visage et des cheveux.</p>
+    <div class="hero-cta">
+      <a href="#categories" class="btn btn-plum">Découvrir nos produits</a>
+      <a href="#contact" class="btn btn-line">Demander un conseil</a>
     </div>
   </section>
 
-  <section id="univers" class="section">
-    <div class="section-head">
-      <p class="eyebrow">Nos univers</p>
-      <h2>Toute la gamme en un coup d'œil</h2>
-    </div>
-    <div class="universe-grid" id="universeGrid"></div>
+  <section id="best-sellers" class="section section-soft">
+    <h2 class="script section-title">Best-sellers</h2>
+    <p class="lead-center">Les produits que nos clients préfèrent.</p>
+    <div class="best-grid" id="bestGrid"></div>
   </section>
 
-  <section id="parfums" class="section section-dark">
-    <div class="section-head">
-      <p class="eyebrow">Olfazeta · Mψtologik</p>
-      <h2>Les familles olfactives</h2>
-      <p class="sub">Chaque parfum Chogan porte un numéro. Retrouvez-le selon votre famille olfactive préférée.</p>
+  <section id="categories" class="section">
+    <h2 class="script section-title">Catégories &amp; gammes</h2>
+    <p class="lead-center">Ouvrez une catégorie pour voir ses produits, puis cliquez sur un produit pour sa fiche.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tabParfums" aria-controls="panelParfums" aria-selected="true">Parfums</button>
+      <button class="tab" role="tab" id="tabSoins" aria-controls="panelSoins" aria-selected="false">Soins</button>
     </div>
-    <div class="families" id="families"></div>
-    <div class="formats">
-      <div><strong>50 ml</strong><span>Eau de parfum</span></div>
-      <div><strong>70 ml</strong><span>Collection Luxury</span></div>
-      <div><strong>Échantillons</strong><span>Pour tester avant de choisir</span></div>
-      <div><strong>Coffrets</strong><span>Idées cadeaux</span></div>
+
+    <div id="panelParfums" role="tabpanel" aria-labelledby="tabParfums">
+      <div id="pListe" class="accordion"></div>
+    </div>
+
+    <div id="panelSoins" role="tabpanel" aria-labelledby="tabSoins" hidden>
+      <div id="sListe" class="accordion"></div>
     </div>
   </section>
 
-  <section id="catalogue" class="section">
-    <div class="section-head">
-      <p class="eyebrow">Catalogue</p>
-      <h2>Tous les produits</h2>
-    </div>
-    <div class="toolbar">
-      <input type="search" id="search" placeholder="Rechercher un produit, un numéro, une note…" aria-label="Rechercher" />
-      <div class="chips" id="chips" role="tablist"></div>
-    </div>
-    <p class="count" id="count"></p>
-    <div class="product-grid" id="productGrid"></div>
+  <section id="ingredients" class="section section-soft">
+    <h2 class="script section-title">Les ingrédients phares</h2>
+    <p class="lead-center">Cliquez sur un ingrédient pour voir les soins qui en contiennent.</p>
+    <div class="ingredients" id="ingredientsGrid"></div>
   </section>
 
-  <section id="maison" class="section section-ivory">
-    <div class="about">
+  <section id="routines" class="section">
+    <h2 class="script section-title">Routines conseillées</h2>
+    <p class="lead-center">Trois rituels pour le visage, étape par étape.</p>
+    <div class="routines" id="routinesGrid"></div>
+  </section>
+
+  <section id="histoire" class="section section-soft">
+    <div class="story">
       <div>
-        <p class="eyebrow">La Maison Chogan</p>
-        <h2>Une entreprise italienne</h2>
-        <p>Fondée en 2013 par Michelangelo Paradiso, Chogan Group S.p.A. conçoit et fabrique en Italie ses parfums et cosmétiques. Ses parfums sont élaborés à partir d'alcool d'origine biologique et d'essences de haute concentration.</p>
-        <p>Au fil des années, la maison a élargi son savoir-faire : soins du visage et du corps, capillaires, parfums d'ambiance, bien-être, épicerie fine italienne et accessoires.</p>
+        <h2 class="script section-title story-title">Notre histoire</h2>
+        <p>AW Parfumerie, c'est l'envie de rendre les beaux parfums accessibles à tous. Nous avons réuni une sélection de fragrances pour femme, homme et mixte, en flacon de 70 ml ou en format de 15 ml à emporter partout.</p>
+        <p>Pour prendre soin de vous de la tête aux pieds, nous proposons aussi une gamme complète de soins fabriqués en Italie, aux actifs reconnus comme la bave d'escargot, le lait d'ânesse ou le neem.</p>
+        <p>Chaque client est conseillé personnellement, pour trouver le parfum ou le soin qui lui ressemble.</p>
       </div>
       <ul class="values">
-        <li><strong>Made in Italy</strong><span>Conception et production italiennes</span></li>
-        <li><strong>Haute concentration</strong><span>Des parfums qui tiennent</span></li>
-        <li><strong>Non testé sur les animaux</strong><span>Une beauté responsable</span></li>
-        <li><strong>Prix accessibles</strong><span>Le luxe sans le surcoût</span></li>
+        <li><strong>Ingrédients naturels</strong><span>Nombreuses références bio et vegan</span></li>
+        <li><strong>Testés dermatologiquement</strong><span>pH équilibré, pour tous types de peau</span></li>
+        <li><strong>Sans parabènes</strong><span>Des formules plus douces</span></li>
+        <li><strong>Non testés sur les animaux</strong><span>Une beauté responsable</span></li>
       </ul>
     </div>
   </section>
 
-  <section id="contact" class="section section-dark contact">
-    <p class="eyebrow">Conseil personnalisé</p>
-    <h2>Un produit vous intéresse ?</h2>
-    <p class="sub">Ce site est une vitrine : aucune vente en ligne. Contactez-nous pour un conseil, un échantillon ou une commande auprès d'un(e) conseiller(e) Chogan.</p>
-    <div class="hero-cta">
-      <a href="mailto:contact@exemple.fr" class="btn btn-gold">Nous écrire</a>
-      <a href="https://www.instagram.com/" class="btn btn-ghost" target="_blank" rel="noopener">Instagram</a>
+  <section id="contact" class="section contact">
+    <h2 class="script section-title">Nous contacter</h2>
+    <p class="lead-center">Ce site est une vitrine : aucune vente en ligne. Écrivez-nous pour un conseil, un échantillon ou une commande.</p>
+    <div class="contact-card">
+      <span class="caps-label">Par e-mail</span>
+      <a href="mailto:kururo.f@gmail.com" class="contact-link">kururo.f@gmail.com</a>
     </div>
   </section>
 
   <footer class="footer">
-    <p>Vitrine Chogan.</p>
-    <p class="legal">Site de présentation indépendant, non affilié à Chogan Group S.p.A. Les marques citées appartiennent à leurs propriétaires. Aucune transaction n'est réalisée sur ce site.</p>
+    <p class="script footer-logo">AW Parfumerie</p>
+    <p>Les parfums ouverts ne sont ni repris, ni échangés.</p>
+    <p class="legal">Site vitrine : aucune vente en ligne, le panier est une simple simulation. Prix indicatifs, susceptibles d'évoluer.</p>
+    <p class="legal">Nos produits sont créés en s'inspirant de parfums célèbres. Toute référence à des marques ou à des noms est utilisée uniquement de façon descriptive, pour identifier les fragrances. Les marques citées appartiennent à leurs propriétaires. Il ne s'agit ni de copies, ni de contrefaçons.</p>
   </footer>
+
+  <div class="drawer-bg" id="drawerBg" hidden></div>
+  <aside class="drawer" id="drawer" aria-label="Panier" hidden>
+    <div class="drawer-head">
+      <h2 class="script">Mon panier</h2>
+      <button class="modal-close" id="drawerClose" aria-label="Fermer le panier">×</button>
+    </div>
+    <p class="sim-note">Simulation uniquement : aucun paiement n'est possible sur ce site.</p>
+    <ul class="cart-list" id="cartList"></ul>
+    <div class="drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" hidden></div>
 
   <div class="modal" id="modal" hidden>
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -117,6 +137,7 @@
     </div>
   </div>
 
+  <script src="assets/js/parfums.js"></script>
   <script src="assets/js/produits.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
