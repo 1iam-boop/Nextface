@@ -2,89 +2,86 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>AW Parfumerie</title>
-  <meta name="description" content="AW Parfumerie : vitrine de soins corps, visage, cheveux, solaires et brumes parfumées. Site de présentation, sans vente en ligne." />
+  <meta name="description" content="AW Parfumerie : liste des parfums femme, homme et mixte, et soins corps, visage, cheveux et solaires. Site vitrine, sans vente en ligne." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Mrs+Saint+Delafield&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/vitrine.css" />
 </head>
 <body>
 
   <header class="topbar">
-    <a href="#accueil" class="brand">
-      <span class="brand-mark">AW</span>
-      <span class="brand-name">AW<small>Parfumerie</small></span>
-    </a>
-    <button class="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+    <a href="#accueil" class="brand"><span class="script">AW</span> Parfumerie</a>
+    <button class="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">Menu</button>
     <nav class="nav">
-      <a href="#univers">Univers</a>
-      <a href="#brumes">Brumes</a>
-      <a href="#ingredients">Ingrédients</a>
+      <a href="#parfums">Parfums</a>
+      <a href="#etuis">Étuis</a>
+      <a href="#soins">Soins</a>
       <a href="#routines">Routines</a>
-      <a href="#catalogue">Catalogue</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
   <section id="accueil" class="hero">
-    <div class="hero-inner">
-      <p class="eyebrow">AW Parfumerie · Fabriqué en Italie</p>
-      <h1>La lumière d'une<br /><em>nouvelle beauté</em></h1>
-      <p class="lead">Soins corps, visage, cheveux, solaires et brumes parfumées. Ingrédients naturels, testés dermatologiquement, sans parabènes. Une vitrine pour découvrir : pas de panier, pas de paiement.</p>
-      <div class="hero-cta">
-        <a href="#catalogue" class="btn btn-gold">Explorer le catalogue</a>
-        <a href="#contact" class="btn btn-ghost">Demander un conseil</a>
-      </div>
+    <p class="script hero-title">AW Parfumerie</p>
+    <p class="hero-sub">Parfums femme, homme &amp; mixte · Soins du corps, du visage et des cheveux</p>
+    <div class="blobs">
+      <a href="#parfums" class="blob blob-a"><strong>35 €</strong><span>les 70 ml</span></a>
+      <a href="#parfums" class="blob blob-b"><strong>11,90 €</strong><span>les 15 ml</span></a>
+      <a href="#soins" class="blob blob-c"><strong>165</strong><span>soins</span></a>
     </div>
-    <div class="hero-bottles" aria-hidden="true">
-      <span class="bottle b1"></span><span class="bottle b2"></span><span class="bottle b3"></span>
+    <div class="hero-cta">
+      <a href="#parfums" class="btn btn-plum">Voir la liste des parfums</a>
+      <a href="#contact" class="btn btn-line">Demander un conseil</a>
     </div>
   </section>
 
-  <section id="univers" class="section">
-    <div class="section-head">
-      <p class="eyebrow">Nos univers</p>
-      <h2>Toute la gamme en un coup d'œil</h2>
+  <section id="parfums" class="section">
+    <h2 class="script section-title">Liste des parfums</h2>
+    <div class="filters">
+      <input type="search" id="pSearch" placeholder="Rechercher un parfum par son nom…" aria-label="Rechercher un parfum" />
+      <div class="chips" id="pGenres"></div>
+      <div class="chips chips-small" id="pGammes"></div>
     </div>
+    <div id="pListe" class="p-groups"></div>
+  </section>
+
+  <section id="etuis" class="section section-soft">
+    <h2 class="caps caps-brown">Les étuis</h2>
+    <p class="lead-center">Pour protéger et emporter votre flacon de 15 ml.</p>
+    <div class="etuis" id="etuisGrid"></div>
+  </section>
+
+  <section id="soins" class="section">
+    <h2 class="script section-title">Nos soins</h2>
+    <p class="lead-center">Corps, visage, cheveux, solaire : des formules aux ingrédients naturels, testées dermatologiquement et sans parabènes.</p>
     <div class="universe-grid" id="universeGrid"></div>
   </section>
 
-  <section id="brumes" class="section section-dark">
-    <div class="section-head">
-      <p class="eyebrow">Brumes corps parfumées</p>
-      <h2>Cinq sillages solaires</h2>
-      <p class="sub">Sprays corps parfumés enrichis du complexe exclusif PUREYOUTH™ et de glycérine : ils hydratent, exfolient en douceur, protègent le collagène et laissent une sensation de fraîcheur. Formules fabriquées en Italie.</p>
-    </div>
+  <section id="brumes" class="section section-soft">
+    <h2 class="caps caps-plum">Brumes corps parfumées</h2>
+    <p class="lead-center">Enrichies du complexe PUREYOUTH™ et de glycérine : elles hydratent, exfolient en douceur et laissent une sensation de fraîcheur.</p>
     <div class="mists" id="mists"></div>
   </section>
 
-  <section id="ingredients" class="section section-ivory">
-    <div class="section-head">
-      <p class="eyebrow">Les ingrédients phares</p>
-      <h2>Ce qui fait la différence</h2>
-      <p class="sub sub-dark">Cliquez sur un ingrédient pour voir tous les produits qui en contiennent.</p>
-    </div>
+  <section id="ingredients" class="section">
+    <h2 class="caps caps-brown">Les ingrédients phares</h2>
+    <p class="lead-center">Cliquez sur un ingrédient pour voir les soins qui en contiennent.</p>
     <div class="ingredients" id="ingredientsGrid"></div>
   </section>
 
-  <section id="routines" class="section">
-    <div class="section-head">
-      <p class="eyebrow">Routines visage conseillées</p>
-      <h2>Trois rituels, étape par étape</h2>
-    </div>
+  <section id="routines" class="section section-soft">
+    <h2 class="caps caps-taupe">Routines visage conseillées</h2>
     <div class="routines" id="routinesGrid"></div>
   </section>
 
   <section id="catalogue" class="section">
-    <div class="section-head">
-      <p class="eyebrow">Catalogue</p>
-      <h2>Tous les produits</h2>
-    </div>
-    <div class="toolbar">
-      <input type="search" id="search" placeholder="Rechercher un produit, une référence, un actif…" aria-label="Rechercher" />
-      <div class="chips" id="chips" role="tablist"></div>
+    <h2 class="script section-title">Tous les soins</h2>
+    <div class="filters">
+      <input type="search" id="search" placeholder="Rechercher un soin ou un actif…" aria-label="Rechercher un soin" />
+      <div class="chips chips-small" id="chips"></div>
       <div class="subbar">
         <select id="rubrique" aria-label="Rubrique"></select>
         <label class="toggle"><input type="checkbox" id="fBio" /> Bio</label>
@@ -95,34 +92,18 @@
     <div class="product-grid" id="productGrid"></div>
   </section>
 
-  <section id="engagements" class="section section-ivory">
-    <div class="about">
-      <div>
-        <p class="eyebrow">AW Parfumerie</p>
-        <h2>Une beauté naturelle et exigeante</h2>
-        <p>AW Parfumerie vous présente une gamme complète de soins fabriqués en Italie. Les formules associent des actifs reconnus, comme la bave d'escargot, le lait d'ânesse ou le neem, à des ingrédients naturels.</p>
-        <p>De nombreuses références sont certifiées bio et vegan, et chaque produit convient à tous les types de peau.</p>
-      </div>
-      <ul class="values">
-        <li><strong>Ingrédients naturels</strong><span>Nombreuses références bio et vegan</span></li>
-        <li><strong>Testés dermatologiquement</strong><span>pH équilibré, pour tous types de peau</span></li>
-        <li><strong>Sans parabènes</strong><span>Des formules plus douces</span></li>
-        <li><strong>Non testés sur les animaux</strong><span>Une beauté responsable</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <section id="contact" class="section section-dark contact">
-    <p class="eyebrow">Conseil personnalisé</p>
-    <h2>Un produit vous intéresse ?</h2>
-    <p class="sub">Ce site est une vitrine : aucune vente en ligne. Contactez-nous pour un conseil, une routine personnalisée ou une commande auprès d'AW Parfumerie.</p>
-    <div class="hero-cta">
-      <a href="mailto:kururo.f@gmail.com" class="btn btn-gold">kururo.f@gmail.com</a>
+  <section id="contact" class="section contact">
+    <h2 class="script section-title">Un parfum vous intéresse ?</h2>
+    <p class="lead-center">Ce site est une vitrine : aucune vente en ligne. Écrivez-nous pour un conseil, un échantillon ou une commande.</p>
+    <div class="contact-card">
+      <span class="caps-label">Par e-mail</span>
+      <a href="mailto:kururo.f@gmail.com" class="contact-link">kururo.f@gmail.com</a>
     </div>
   </section>
 
   <footer class="footer">
-    <p>© AW Parfumerie</p>
+    <p class="script footer-logo">AW Parfumerie</p>
+    <p>Les parfums ouverts ne sont ni repris, ni échangés.</p>
     <p class="legal">Site vitrine : aucune vente en ligne. Prix indicatifs, susceptibles d'évoluer.</p>
   </footer>
 
@@ -133,6 +114,7 @@
     </div>
   </div>
 
+  <script src="assets/js/parfums.js"></script>
   <script src="assets/js/produits.js"></script>
   <script src="assets/js/app.js"></script>
 </body>

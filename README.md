@@ -1,10 +1,11 @@
 # AW Parfumerie
 
-Site vitrine (sans boutique) : brumes corps, soins corps, visage, rasage, cheveux, solaire, remèdes, animaux.
+Site vitrine (sans boutique) : liste des parfums (femme, homme, mixte, luxe, luxury, créations, enfants), étuis, et soins corps, visage, rasage, cheveux, solaire, remèdes, animaux.
 
 - `index.html` : la vitrine
-- `assets/js/produits.js` : **la liste des produits** (source : AW Catalogue) ; mettre `AFFICHER_PRIX = false` pour masquer les prix
-- `assets/css/vitrine.css` : le style (noir & or)
+- `assets/js/parfums.js` : **la liste des parfums** (une ligne = référence + nom ; prix à la fin pour Luxe et Luxury)
+- `assets/js/produits.js` : **la liste des soins** (source : AW Catalogue) ; mettre `AFFICHER_PRIX = false` pour masquer tous les prix
+- `assets/css/vitrine.css` : le style (crème, prune, taupe, brun)
 
 ## Mise en ligne sur GitHub Pages
 Settings → Pages → Source : « Deploy from a branch » → branche `main`, dossier `/ (root)`.
