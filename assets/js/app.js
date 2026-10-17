@@ -50,95 +50,65 @@
       (AFFICHER_PRIX ? '<span class="best-price">' + euros(p.prix) + '</span>' : '') + '</button>';
   }).join("");
 
-  // ——— Parfums ———
-  const pFiltre = { genre: "Tous", gamme: "toutes" };
-  $("#pGenres").innerHTML = ["Tous", "Femme", "Homme", "Mixte"].map((g) => '<button class="chip" data-c="' + g + '">' + g + '</button>').join("");
-  $("#pGammes").innerHTML = [["toutes", "Toutes les gammes"]].concat(Object.entries(GAMMES).map(([k, g]) => [k, g.nom]))
-    .map(([k, n]) => '<button class="chip" data-c="' + k + '">' + n + '</button>').join("");
-
-  function enTete(gamme, genre) {
-    const g = GAMMES[gamme];
-    let prix;
-    if (gamme === "classique") prix = "35 € les 70 ml · 11,90 € les 15 ml<small>Hors frais de port</small>";
-    else if (gamme === "luxe") prix = "70 ml · 15 ml";
-    else if (gamme === "luxury") prix = "50 ml · 15 ml";
-    else prix = euros(g.prixGrand) + " les " + g.grand;
-    const titre = gamme === "enfant" ? "Parfums enfants" : gamme === "creation" ? "Créations" : genre + " · " + g.nom;
-    return '<div class="p-head"><h3 class="g-' + genre + '">' + titre + '</h3><span class="price-note">' + prix + '</span></div>';
+  // ——— Catégories dépliantes ———
+  function bloc(id, classe, titre, couleur, nb, prix, contenu) {
+    return '<details class="acc ' + classe + '" id="' + id + '"><summary>' +
+      '<span class="acc-title ' + couleur + '">' + titre + '</span><span class="acc-meta"><span class="acc-count">' + nb + '</span>' +
+      (prix ? '<span class="acc-price">' + prix + '</span>' : '') + '</span><span class="acc-chevron" aria-hidden="true"></span></summary>' +
+      '<div class="acc-body">' + contenu + '</div></details>';
   }
+  const compte = (n, mot) => n + " " + mot + (n > 1 ? "s" : "");
 
+  // Parfums
+  function prixGroupe(gamme) {
+    const g = GAMMES[gamme];
+    if (!AFFICHER_PRIX) return "";
+    if (gamme === "classique") return "35 € les 70 ml · 11,90 € les 15 ml";
+    if (gamme === "luxe") return "70 ml · 15 ml";
+    if (gamme === "luxury") return "50 ml · 15 ml";
+    return euros(g.prixGrand) + " les " + g.grand;
+  }
   function ligneParfum(p) {
     const i = PARFUMS.indexOf(p);
-    const prix = (p.gamme === "luxe" || p.gamme === "luxury") ? '<span class="p-price">' + euros(p.prixGrand) + ' · ' + euros(p.prix15) + '</span>' : '';
+    const prix = AFFICHER_PRIX && (p.gamme === "luxe" || p.gamme === "luxury") ? '<span class="p-price">' + euros(p.prixGrand) + ' · ' + euros(p.prix15) + '</span>' : '';
     return '<li><button class="p-item" id="parfum-' + i + '" data-p="' + i + '"><span class="p-name">' + echapper(p.nom) +
       (p.famille ? '<span class="p-fam">' + echapper(p.famille) + '</span>' : '') + '</span>' +
       '<span class="p-ref">' + echapper(p.ref) + '</span>' + prix + '</button></li>';
   }
-
-  function afficherParfums() {
-    const q = sansAccent($("#pSearch").value.trim());
-    document.querySelectorAll("#pGenres .chip").forEach((b) => b.classList.toggle("active", b.dataset.c === pFiltre.genre));
-    document.querySelectorAll("#pGammes .chip").forEach((b) => b.classList.toggle("active", b.dataset.c === pFiltre.gamme));
-    const liste = PARFUMS.filter((p) =>
-      (pFiltre.genre === "Tous" || p.genre === pFiltre.genre) &&
-      (pFiltre.gamme === "toutes" || p.gamme === pFiltre.gamme) &&
-      (!q || sansAccent([p.nom, p.ref, p.ref15, p.famille, p.inspiration].filter(Boolean).join(" ")).includes(q)));
-    const groupes = [];
-    Object.keys(GAMMES).forEach((gamme) => {
-      const genres = (gamme === "creation" || gamme === "enfant") ? [null] : ["Femme", "Homme", "Mixte"];
-      genres.forEach((genre) => {
-        const items = liste.filter((p) => p.gamme === gamme && (genre === null || p.genre === genre));
-        if (items.length) groupes.push('<div class="p-group ' + gamme + '">' + enTete(gamme, genre || (gamme === "enfant" ? "Enfant" : "Mixte")) +
-          '<ul class="p-list">' + items.map(ligneParfum).join("") + '</ul></div>');
-      });
+  const blocsParfums = [];
+  Object.keys(GAMMES).forEach((gamme) => {
+    const genres = (gamme === "creation" || gamme === "enfant") ? [null] : ["Femme", "Homme", "Mixte"];
+    genres.forEach((genre) => {
+      const items = PARFUMS.filter((p) => p.gamme === gamme && (genre === null || p.genre === genre));
+      if (!items.length) return;
+      const couleur = "g-" + (genre || (gamme === "enfant" ? "Enfant" : "Mixte"));
+      const titre = gamme === "enfant" ? "Parfums enfants" : gamme === "creation" ? "Créations" : "Parfums " + genre.toLowerCase() + " · " + GAMMES[gamme].nom;
+      const note = gamme === "classique" ? '<p class="acc-note">Hors frais de port.</p>' : "";
+      blocsParfums.push(bloc("cat-" + gamme + "-" + (genre || "tous"), gamme, titre, couleur, compte(items.length, "parfum"), prixGroupe(gamme),
+        note + '<ul class="p-list">' + items.map(ligneParfum).join("") + '</ul>'));
     });
-    $("#pListe").innerHTML = groupes.join("") || '<p class="empty">Aucun parfum ne correspond à votre recherche.</p>';
-  }
-  $("#pGenres").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (b) { pFiltre.genre = b.dataset.c; afficherParfums(); } });
-  $("#pGammes").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (b) { pFiltre.gamme = b.dataset.c; afficherParfums(); } });
-  $("#pSearch").addEventListener("input", afficherParfums);
-
-  $("#etuisGrid").innerHTML = ETUIS.map((e) =>
+  });
+  const etuis = '<p class="acc-note">Pour protéger et emporter votre flacon de 15 ml.</p><div class="etuis">' + ETUIS.map((e) =>
     '<div class="etui"><span class="etui-tube" style="--c:' + e.couleur + '"></span><strong>' + echapper(e.nom) + '</strong>' +
-    (AFFICHER_PRIX ? '<b>' + euros(e.prix) + '</b>' : '') + '<span>' + e.ref + '</span></div>'
-  ).join("");
+    (AFFICHER_PRIX ? '<b>' + euros(e.prix) + '</b>' : '') + '<span>' + e.ref + '</span></div>').join("") + '</div>';
+  blocsParfums.push(bloc("cat-etuis", "etuis-acc", "Les étuis", "g-Mixte", compte(ETUIS.length, "étui"), AFFICHER_PRIX ? "13 € · 15 €" : "", etuis));
+  $("#pListe").innerHTML = blocsParfums.join("");
 
-  // ——— Soins ———
-  const filtre = { univers: "tout", rubrique: "toutes" };
-  $("#chips").innerHTML = [["tout", "Tous les soins"]].concat(Object.entries(UNIVERS).map(([k, u]) => [k, u.nom]))
-    .map(([k, nom]) => '<button class="chip" data-cat="' + k + '">' + echapper(nom) + '</button>').join("");
-
-  function remplirRubriques() {
-    const rubs = [...new Set(PRODUITS.filter((p) => filtre.univers === "tout" || p.univers === filtre.univers).map((p) => p.rubrique))];
-    $("#rubrique").innerHTML = '<option value="toutes">Toutes les rubriques</option>' + rubs.map((r) => '<option>' + echapper(r) + '</option>').join("");
-    $("#rubrique").hidden = rubs.length < 2;
-    filtre.rubrique = "toutes";
+  // Soins
+  function ligneSoin(p) {
+    const i = parRef[p.ref];
+    return '<li><button class="p-item" id="soin-' + i + '" data-i="' + i + '"><span class="p-name">' + echapper(p.nom) +
+      '<span class="p-fam">' + echapper(p.format) + (p.bio ? ' · Bio' : '') + (p.vegan ? ' · Vegan' : '') + '</span></span>' +
+      '<span class="p-ref">' + echapper(p.ref.split(" ")[0]) + '</span>' + (AFFICHER_PRIX ? '<span class="p-price">' + euros(p.prix) + '</span>' : '') + '</button></li>';
   }
-
-  function afficherSoins() {
-    const q = sansAccent($("#search").value.trim());
-    const bio = $("#fBio").checked, vegan = $("#fVegan").checked;
-    const liste = PRODUITS.filter((p) =>
-      (filtre.univers === "tout" || p.univers === filtre.univers) &&
-      (filtre.rubrique === "toutes" || p.rubrique === filtre.rubrique) &&
-      (!bio || p.bio) && (!vegan || p.vegan) &&
-      (!q || sansAccent([p.ref, p.nom, p.actifs, p.rubrique, p.inspiration].filter(Boolean).join(" ")).includes(q)));
-    document.querySelectorAll("#chips .chip").forEach((b) => b.classList.toggle("active", b.dataset.cat === filtre.univers));
-    $("#count").textContent = liste.length + " soin" + (liste.length > 1 ? "s" : "");
-    $("#productGrid").innerHTML = liste.length ? liste.map((p) => {
-      const u = UNIVERS[p.univers];
-      return '<article class="card" id="soin-' + parRef[p.ref] + '" tabindex="0" data-i="' + parRef[p.ref] + '">' +
-        '<div class="card-visual" style="--tint:' + u.teinte + '">' + visuel(u.forme, u.teinte) + '<span class="card-tags">' + labels(p) + '</span></div>' +
-        '<div class="card-body"><span class="card-cat">' + echapper(p.rubrique) + '</span>' +
-        '<h3>' + echapper(p.nom) + '</h3><p>' + echapper(p.actifs) + '</p>' +
-        '<div class="card-foot"><span>' + echapper(p.format) + ' · ' + echapper(p.ref.split(" ")[0]) + '</span>' + (AFFICHER_PRIX ? '<strong>' + euros(p.prix) + '</strong>' : '') + '</div>' +
-        '</div></article>';
-    }).join("") : '<p class="empty">Aucun soin ne correspond à votre recherche.</p>';
-  }
-  function choisirUnivers(cat) { filtre.univers = cat; remplirRubriques(); afficherSoins(); }
-  $("#chips").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (b) choisirUnivers(b.dataset.cat); });
-  $("#rubrique").addEventListener("change", (e) => { filtre.rubrique = e.target.value; afficherSoins(); });
-  ["#search", "#fBio", "#fVegan"].forEach((s) => $(s).addEventListener("input", afficherSoins));
+  $("#sListe").innerHTML = Object.entries(UNIVERS).map(([cle, u]) => {
+    const items = PRODUITS.filter((p) => p.univers === cle);
+    const rubs = [...new Set(items.map((p) => p.rubrique))];
+    const contenu = '<p class="acc-note">' + echapper(u.texte) + '</p>' + rubs.map((r) =>
+      (rubs.length > 1 ? '<h4 class="acc-sub">' + echapper(r) + '</h4>' : '') +
+      '<ul class="p-list">' + items.filter((p) => p.rubrique === r).map(ligneSoin).join("") + '</ul>').join("");
+    return bloc("cat-" + cle, "soin", echapper(u.nom), "", compte(items.length, "produit"), "", contenu);
+  }).join("");
 
   // ——— Ingrédients & routines ———
   const motCle = (nom) => nom.toLowerCase().replace(" vera", "");
@@ -150,11 +120,10 @@
   $("#ingredientsGrid").addEventListener("click", (e) => {
     const b = e.target.closest(".ingredient");
     if (!b) return;
-    onglet("soins");
-    $("#search").value = b.dataset.q;
-    $("#fBio").checked = $("#fVegan").checked = false;
-    choisirUnivers("tout");
-    $("#categories").scrollIntoView({ behavior: "smooth" });
+    const ing = INGREDIENTS.find((x) => motCle(x.nom) === b.dataset.q);
+    const items = PRODUITS.filter((p) => (p.actifs + " " + p.nom).toLowerCase().includes(b.dataset.q));
+    montrer('<span class="card-cat">Ingrédient phare</span><h3 id="modalTitle">' + echapper(ing.nom) + '</h3><p class="modal-text">' + echapper(ing.texte) + '</p>' +
+      '<ul class="p-list p-list-one">' + items.map(ligneSoin).join("").replace(/ id="soin-\d+"/g, "") + '</ul>');
   });
 
   const etape = (ref, label) => {
@@ -199,13 +168,14 @@
   function fermer() { modal.hidden = true; document.body.style.overflow = ""; }
   document.addEventListener("click", (e) => {
     if (modal.contains(e.target) || e.target.closest(".drawer, .search-panel")) return;
-    const s = e.target.closest(".card, .step, .best[data-i]");
+    const s = e.target.closest(".step, .best[data-i], .p-item[data-i]");
     if (s) return ouvrirSoin(+s.dataset.i);
-    const p = e.target.closest(".p-item, .best[data-p]");
+    const p = e.target.closest(".best[data-p], .p-item[data-p]");
     if (p) ouvrirParfum(+p.dataset.p);
   });
-  $("#productGrid").addEventListener("keydown", (e) => { const c = e.target.closest(".card"); if (c && e.key === "Enter") ouvrirSoin(+c.dataset.i); });
   modal.addEventListener("click", (e) => {
+    const s = e.target.closest(".p-item[data-i]");
+    if (s) return ouvrirSoin(+s.dataset.i);
     const b = e.target.closest("[data-add]");
     if (b) ajouter(b.dataset.add);
     if (b || e.target === modal || e.target.closest(".modal-close") || e.target.closest(".modal-cta")) fermer();
@@ -249,12 +219,9 @@
 
   function allerA(x) {
     fermerRecherche();
-    if (x.type === "p") {
-      onglet("parfums"); pFiltre.genre = "Tous"; pFiltre.gamme = "toutes"; $("#pSearch").value = ""; afficherParfums();
-    } else {
-      onglet("soins"); $("#search").value = ""; $("#fBio").checked = $("#fVegan").checked = false; choisirUnivers("tout");
-    }
+    onglet(x.type === "p" ? "parfums" : "soins");
     const el = document.getElementById((x.type === "p" ? "parfum-" : "soin-") + x.i);
+    el.closest("details").open = true;
     el.scrollIntoView({ behavior: "smooth", block: "center" });
     el.classList.add("flash");
     setTimeout(() => el.classList.remove("flash"), 3300);
@@ -349,8 +316,5 @@
   toggle.addEventListener("click", () => { const o = document.body.classList.toggle("nav-open"); toggle.setAttribute("aria-expanded", o); });
   document.querySelectorAll(".nav a").forEach((a) => a.addEventListener("click", () => document.body.classList.remove("nav-open")));
 
-  afficherParfums();
-  remplirRubriques();
-  afficherSoins();
   dessinerPanier();
 })();

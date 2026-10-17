@@ -68,31 +68,29 @@ img, svg { display: block; max-width: 100%; }
 .section-soft { background: var(--papier); }
 .section-title { text-align: center; font-size: clamp(2.8rem, 6vw, 4.2rem); line-height: 1.1; color: var(--encre); margin-bottom: 1.5rem; }
 
-/* Filtres */
-.filters { max-width: 1100px; margin: 0 auto 2.5rem; display: grid; gap: .9rem; justify-items: center; }
-.filters input[type="search"] { width: min(560px, 100%); padding: .9rem 1.3rem; border-radius: 999px; border: 1.5px solid var(--trait); background: var(--papier); font: 400 .95rem var(--sans); color: var(--encre); outline: none; }
-.filters input[type="search"]:focus { border-color: var(--prune); }
-.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
-.chip { padding: .55rem 1.2rem; border-radius: 999px; border: 1.5px solid var(--trait); background: transparent; font: 600 .78rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--gris); cursor: pointer; transition: .2s; }
-.chips-small .chip { padding: .4rem .95rem; font-size: .7rem; }
-.chip:hover { border-color: var(--encre); color: var(--encre); }
-.chip.active { background: var(--encre); border-color: var(--encre); color: var(--papier); }
-.chip[data-c="Femme"].active { background: var(--prune); border-color: var(--prune); }
-.chip[data-c="Homme"].active { background: var(--taupe); border-color: var(--taupe); }
-.chip[data-c="Mixte"].active { background: var(--brun); border-color: var(--brun); }
+/* Catégories dépliantes */
+.accordion { max-width: 1100px; margin: 0 auto; display: grid; gap: .8rem; }
+.acc { border-radius: 24px; background: var(--papier); border: 1px solid var(--trait); overflow: hidden; }
+.acc.luxe, .acc.luxury { background: linear-gradient(160deg, var(--rose), var(--rose-fonce)); border-color: transparent; }
+.acc summary { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .3rem 1rem; padding: 1.1rem 1.5rem; cursor: pointer; list-style: none; }
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary:hover .acc-title { opacity: .8; }
+.acc summary:focus-visible { outline: 2px solid var(--prune); outline-offset: -2px; border-radius: 24px; }
+.acc-title { font-family: var(--serif); font-weight: 500; font-size: clamp(1.15rem, 2.4vw, 1.45rem); text-transform: uppercase; letter-spacing: .05em; }
+.acc-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; min-width: 0; }
+.acc-count { font-size: .72rem; font-weight: 600; color: var(--gris); }
+.acc-price { font-weight: 700; font-size: .8rem; text-align: right; }
+.acc-chevron { width: .7rem; height: .7rem; margin: 0 .3rem 0 .4rem; border-right: 2px solid var(--encre); border-bottom: 2px solid var(--encre); transform: rotate(45deg) translateY(-3px); transition: transform .25s; flex: none; }
+.acc[open] .acc-chevron { transform: rotate(-135deg) translateY(-2px); }
+.acc-body { padding: 0 1.5rem 1.5rem; border-top: 1px solid rgba(43,35,33,.1); }
+.acc-note { margin: 1rem 0 .4rem; font-size: .82rem; color: var(--gris); }
+.acc-sub { margin: 1.3rem 0 .2rem; font-size: .68rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--brun); }
+.acc .etuis { margin-top: 1.5rem; }
+.p-list-one { grid-template-columns: 1fr !important; margin-top: 1rem; }
+.modal-text { color: var(--gris); font-size: .9rem; }
 
-/* Liste des parfums */
-.p-groups { max-width: 1200px; margin: 0 auto; display: grid; gap: 2rem; }
-.p-group { padding: 2rem clamp(1rem, 3vw, 2.2rem); border-radius: 32px; }
-.p-group.luxe, .p-group.luxury { background: linear-gradient(160deg, var(--rose), var(--rose-fonce)); }
-.p-group.classique, .p-group.creation, .p-group.enfant { background: var(--papier); border: 1px solid var(--trait); }
-.p-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1.5rem; margin-bottom: 1.2rem; padding-bottom: .9rem; border-bottom: 1px solid rgba(43,35,33,.12); }
-.p-head h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(1.3rem, 2.6vw, 1.75rem); text-transform: uppercase; letter-spacing: .05em; }
-.p-head .price-note { font-weight: 700; font-size: .85rem; letter-spacing: .04em; }
-.p-head .price-note { text-align: right; }
-.p-head .price-note small { display: block; font-weight: 500; color: var(--gris); }
+/* Listes de produits */
 .g-Femme { color: var(--prune); } .g-Homme { color: var(--taupe-clair); } .g-Mixte { color: var(--brun); } .g-Enfant { color: var(--bleu); }
-.p-group.luxe .p-list, .p-group.luxury .p-list { grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); }
 .p-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0 2rem; list-style: none; margin: 0; padding: 0; }
 .p-item { display: flex; align-items: baseline; gap: .6rem; width: 100%; padding: .55rem 0; background: none; border: 0; border-bottom: 1px dotted rgba(43,35,33,.18); text-align: left; cursor: pointer; font-family: var(--sans); color: var(--encre); }
 .p-name { flex: 1; min-width: 0; font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 1.28rem; line-height: 1.2; }
@@ -133,27 +131,6 @@ img, svg { display: block; max-width: 100%; }
 .step-ref { font-size: .62rem; color: var(--gris); }
 .step em { font-style: normal; font-family: var(--sans); font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--brun); }
 
-/* Catalogue des soins */
-.subbar { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .8rem 1.4rem; }
-#rubrique { padding: .5rem 1rem; border-radius: 999px; border: 1.5px solid var(--trait); background: var(--papier); font: 500 .82rem var(--sans); color: var(--encre); max-width: 100%; }
-.toggle { display: flex; align-items: center; gap: .4rem; font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
-.toggle input { accent-color: var(--prune); width: 1rem; height: 1rem; }
-.count { max-width: 1200px; margin: 0 auto 1rem; font-size: .8rem; color: var(--gris); }
-.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.2rem; max-width: 1200px; margin: auto; }
-.card { display: flex; flex-direction: column; border-radius: 24px; overflow: hidden; background: var(--papier); border: 1px solid var(--trait); cursor: pointer; transition: .25s; outline: none; }
-.card:hover, .card:focus-visible { border-color: var(--rose-fonce); transform: translateY(-3px); box-shadow: 0 16px 30px rgba(120,80,60,.08); }
-.card-visual { position: relative; height: 150px; display: grid; place-items: center; background: linear-gradient(160deg, color-mix(in srgb, var(--tint) 28%, var(--papier)), var(--creme)); }
-.card-visual svg { width: 96px; height: 96px; }
-.card-tags, .modal-tags { display: flex; gap: .3rem; }
-.card-tags { position: absolute; left: .8rem; top: .8rem; }
-.tag { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .15rem .55rem; border-radius: 999px; background: #3f6b48; color: #fff; }
-.card-body { flex: 1; display: flex; flex-direction: column; padding: 1.1rem 1.2rem 1.3rem; }
-.card-cat { font-size: .62rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--brun); }
-.card h3 { font-family: var(--serif); font-style: italic; font-size: 1.4rem; line-height: 1.2; margin: .25rem 0 .4rem; }
-.card-body > p { flex: 1; margin: 0; font-size: .82rem; color: var(--gris); }
-.card-foot { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; margin-top: .9rem; padding-top: .7rem; border-top: 1px dotted var(--trait); font-size: .72rem; color: var(--gris); }
-.card-foot strong { font-size: .95rem; color: var(--encre); }
-
 /* Contact & pied de page */
 .contact { text-align: center; background: linear-gradient(160deg, var(--rose), var(--rose-fonce)); }
 .contact .lead-center { color: var(--encre); }
@@ -178,7 +155,9 @@ img, svg { display: block; max-width: 100%; }
 .modal-card dd { margin: 0; color: var(--gris); }
 .modal-card dd.strong { color: var(--encre); font-weight: 700; }
 .modal-ref { font-size: .72rem; color: var(--gris); }
-.modal-tags { margin-bottom: .4rem; }
+.modal-tags { display: flex; gap: .3rem; margin-bottom: .4rem; }
+.card-cat { font-size: .62rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--brun); }
+.tag { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .15rem .55rem; border-radius: 999px; background: #3f6b48; color: #fff; }
 
 .chip:focus-visible, .btn:focus-visible, .nav a:focus-visible, .p-item:focus-visible { outline: 2px solid var(--prune); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
@@ -225,7 +204,6 @@ img, svg { display: block; max-width: 100%; }
 .tabs { display: flex; justify-content: center; gap: .4rem; margin: 0 auto 2rem; padding: .3rem; width: fit-content; border-radius: 999px; background: var(--papier); border: 1px solid var(--trait); }
 .tab { padding: .6rem 1.6rem; border-radius: 999px; border: 0; background: none; font: 600 .8rem var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--gris); cursor: pointer; }
 .tab[aria-selected="true"] { background: var(--prune); color: var(--papier); }
-.etuis-block { max-width: 1200px; margin: 3rem auto 0; padding-top: 2.5rem; border-top: 1px solid var(--trait); }
 
 /* Best-sellers */
 .best-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.2rem; max-width: 1200px; margin: 0 auto; }
@@ -248,6 +226,10 @@ img, svg { display: block; max-width: 100%; }
 @media (max-width: 1080px) { .nav { gap: 1rem; } .nav a { font-size: .68rem; } }
 
 @media (max-width: 860px) {
+  .acc summary { grid-template-columns: 1fr auto; padding: 1rem 1.2rem; }
+  .acc-meta { grid-column: 1; grid-row: 2; justify-content: flex-start; flex-wrap: wrap; gap: .1rem .8rem; }
+  .acc-chevron { grid-column: 2; grid-row: 1 / span 2; }
+  .acc-body { padding: 0 1.2rem 1.2rem; }
   .story { grid-template-columns: 1fr; gap: 2rem; }
   .story-title { text-align: center; }
   .menu-toggle { display: grid; }
@@ -256,9 +238,7 @@ img, svg { display: block; max-width: 100%; }
   .nav a { padding: .9rem max(16px, 5vw); border-top: 1px solid var(--trait); }
   .nav-open .nav { display: flex; }
   .section { padding-block: 3.2rem; }
-  .p-group { border-radius: 24px; }
-  .p-head .price-note { text-align: left; }
-}
+    }
 .card-cat.g-Femme { color: var(--prune); } .card-cat.g-Homme { color: var(--taupe-clair); } .card-cat.g-Mixte { color: var(--brun); } .card-cat.g-Enfant { color: var(--bleu); }
 .drawer[hidden], .drawer-bg[hidden], .toast[hidden], .finder-list[hidden] { display: none; }
 .cart-count[hidden] { display: none; }
