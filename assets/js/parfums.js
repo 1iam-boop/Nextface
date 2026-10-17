@@ -110,3 +110,6 @@ const INSPIRATIONS = {
   "144U": "Bianco Latte · Giardini di Toscana", "146U": "Rouge · Pierre Balmain"
 };
 PARFUMS.forEach((p) => { if (INSPIRATIONS[p.ref]) p.inspiration = INSPIRATIONS[p.ref]; });
+
+// Best-sellers affichés en haut du site : "p:" + référence parfum, ou "s:" + référence soin.
+const BEST_SELLERS = ["p:006W", "p:001M", "p:007W", "p:002M", "p:055W", "p:118U", "s:SBM001", "s:CR17B"];

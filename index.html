@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>AW Parfumerie</title>
-  <meta name="description" content="AW Parfumerie : liste des parfums femme, homme et mixte, et soins corps, visage, cheveux et solaires. Site vitrine, sans vente en ligne." />
+  <meta name="description" content="AW Parfumerie : parfums femme, homme et mixte, et soins corps, visage, cheveux et solaires. Site vitrine, sans vente en ligne." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Mrs+Saint+Delafield&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -14,91 +14,114 @@
 
   <header class="topbar">
     <a href="#accueil" class="brand"><span class="script">AW</span> Parfumerie</a>
-    <div class="finder" role="search">
-      <input type="search" id="finder" placeholder="Nom du produit ou inspiration…" aria-label="Rechercher un produit par son nom ou son inspiration" autocomplete="off" aria-controls="finderList" aria-expanded="false" />
-      <ul class="finder-list" id="finderList" role="listbox" hidden></ul>
-    </div>
-    <button class="cart-btn" id="cartBtn" aria-label="Ouvrir le panier">Panier <span class="cart-count" id="cartCount">0</span></button>
-    <button class="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">Menu</button>
     <nav class="nav">
-      <a href="#parfums">Parfums</a>
-      <a href="#etuis">Étuis</a>
-      <a href="#soins">Soins</a>
+      <a href="#best-sellers">Best-sellers</a>
+      <a href="#categories">Catégories</a>
+      <a href="#ingredients">Ingrédients</a>
       <a href="#routines">Routines</a>
+      <a href="#histoire">Notre histoire</a>
       <a href="#contact">Contact</a>
     </nav>
+    <div class="tools">
+      <button class="icon-btn" id="searchBtn" aria-label="Rechercher un produit" aria-expanded="false" aria-controls="searchPanel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /></svg>
+      </button>
+      <button class="icon-btn" id="cartBtn" aria-label="Ouvrir le panier">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z" /><path d="M9 8V6.5a3 3 0 0 1 6 0V8" /></svg>
+        <span class="cart-count" id="cartCount" hidden>0</span>
+      </button>
+      <button class="icon-btn menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+      </button>
+    </div>
+    <div class="search-panel" id="searchPanel" role="search" hidden>
+      <input type="search" id="finder" placeholder="Nom du produit ou inspiration (ex. Addiction, Opium…)" aria-label="Rechercher un produit par son nom ou son inspiration" autocomplete="off" aria-controls="finderList" />
+      <ul class="finder-list" id="finderList" role="listbox" hidden></ul>
+    </div>
   </header>
 
   <section id="accueil" class="hero">
     <h1 class="hero-title"><span class="script">AW</span><span class="hero-word">Parfumerie</span></h1>
     <p class="hero-sub">Parfums femme, homme &amp; mixte, et soins du corps, du visage et des cheveux.</p>
-    <div class="blobs">
-      <a href="#parfums" class="blob blob-a"><strong>35 €</strong><span>les 70 ml</span></a>
-      <a href="#parfums" class="blob blob-b"><strong>11,90 €</strong><span>les 15 ml</span></a>
-      <a href="#soins" class="blob blob-c"><strong>165</strong><span>soins</span></a>
-    </div>
     <div class="hero-cta">
-      <a href="#parfums" class="btn btn-plum">Voir la liste des parfums</a>
+      <a href="#categories" class="btn btn-plum">Découvrir nos produits</a>
       <a href="#contact" class="btn btn-line">Demander un conseil</a>
     </div>
   </section>
 
-  <section id="parfums" class="section">
-    <h2 class="script section-title">Liste des parfums</h2>
-    <div class="filters">
-      <input type="search" id="pSearch" placeholder="Rechercher un parfum par son nom…" aria-label="Rechercher un parfum" />
-      <div class="chips" id="pGenres"></div>
-      <div class="chips chips-small" id="pGammes"></div>
+  <section id="best-sellers" class="section section-soft">
+    <h2 class="script section-title">Best-sellers</h2>
+    <p class="lead-center">Les produits que nos clients préfèrent.</p>
+    <div class="best-grid" id="bestGrid"></div>
+  </section>
+
+  <section id="categories" class="section">
+    <h2 class="script section-title">Catégories &amp; gammes</h2>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tabParfums" aria-controls="panelParfums" aria-selected="true">Parfums</button>
+      <button class="tab" role="tab" id="tabSoins" aria-controls="panelSoins" aria-selected="false">Soins</button>
     </div>
-    <div id="pListe" class="p-groups"></div>
+
+    <div id="panelParfums" role="tabpanel" aria-labelledby="tabParfums">
+      <div class="filters">
+        <div class="chips" id="pGenres"></div>
+        <div class="chips chips-small" id="pGammes"></div>
+        <input type="search" id="pSearch" placeholder="Filtrer les parfums…" aria-label="Filtrer les parfums" />
+      </div>
+      <div id="pListe" class="p-groups"></div>
+      <div class="etuis-block">
+        <h3 class="caps caps-brown">Les étuis</h3>
+        <p class="lead-center">Pour protéger et emporter votre flacon de 15 ml.</p>
+        <div class="etuis" id="etuisGrid"></div>
+      </div>
+    </div>
+
+    <div id="panelSoins" role="tabpanel" aria-labelledby="tabSoins" hidden>
+      <div class="filters">
+        <div class="chips chips-small" id="chips"></div>
+        <div class="subbar">
+          <select id="rubrique" aria-label="Rubrique"></select>
+          <label class="toggle"><input type="checkbox" id="fBio" /> Bio</label>
+          <label class="toggle"><input type="checkbox" id="fVegan" /> Vegan</label>
+        </div>
+        <input type="search" id="search" placeholder="Filtrer les soins…" aria-label="Filtrer les soins" />
+      </div>
+      <p class="count" id="count"></p>
+      <div class="product-grid" id="productGrid"></div>
+    </div>
   </section>
 
-  <section id="etuis" class="section section-soft">
-    <h2 class="caps caps-brown">Les étuis</h2>
-    <p class="lead-center">Pour protéger et emporter votre flacon de 15 ml.</p>
-    <div class="etuis" id="etuisGrid"></div>
-  </section>
-
-  <section id="soins" class="section">
-    <h2 class="script section-title">Nos soins</h2>
-    <p class="lead-center">Corps, visage, cheveux, solaire : des formules aux ingrédients naturels, testées dermatologiquement et sans parabènes.</p>
-    <div class="universe-grid" id="universeGrid"></div>
-  </section>
-
-  <section id="brumes" class="section section-soft">
-    <h2 class="caps caps-plum">Brumes corps parfumées</h2>
-    <p class="lead-center">Enrichies du complexe PUREYOUTH™ et de glycérine : elles hydratent, exfolient en douceur et laissent une sensation de fraîcheur.</p>
-    <div class="mists" id="mists"></div>
-  </section>
-
-  <section id="ingredients" class="section">
-    <h2 class="caps caps-brown">Les ingrédients phares</h2>
+  <section id="ingredients" class="section section-soft">
+    <h2 class="script section-title">Les ingrédients phares</h2>
     <p class="lead-center">Cliquez sur un ingrédient pour voir les soins qui en contiennent.</p>
     <div class="ingredients" id="ingredientsGrid"></div>
   </section>
 
-  <section id="routines" class="section section-soft">
-    <h2 class="caps caps-taupe">Routines visage conseillées</h2>
+  <section id="routines" class="section">
+    <h2 class="script section-title">Routines conseillées</h2>
+    <p class="lead-center">Trois rituels pour le visage, étape par étape.</p>
     <div class="routines" id="routinesGrid"></div>
   </section>
 
-  <section id="catalogue" class="section">
-    <h2 class="script section-title">Tous les soins</h2>
-    <div class="filters">
-      <input type="search" id="search" placeholder="Rechercher un soin ou un actif…" aria-label="Rechercher un soin" />
-      <div class="chips chips-small" id="chips"></div>
-      <div class="subbar">
-        <select id="rubrique" aria-label="Rubrique"></select>
-        <label class="toggle"><input type="checkbox" id="fBio" /> Bio</label>
-        <label class="toggle"><input type="checkbox" id="fVegan" /> Vegan</label>
+  <section id="histoire" class="section section-soft">
+    <div class="story">
+      <div>
+        <h2 class="script section-title story-title">Notre histoire</h2>
+        <p>AW Parfumerie, c'est l'envie de rendre les beaux parfums accessibles à tous. Nous avons réuni une sélection de fragrances pour femme, homme et mixte, en flacon de 70 ml ou en format de 15 ml à emporter partout.</p>
+        <p>Pour prendre soin de vous de la tête aux pieds, nous proposons aussi une gamme complète de soins fabriqués en Italie, aux actifs reconnus comme la bave d'escargot, le lait d'ânesse ou le neem.</p>
+        <p>Chaque client est conseillé personnellement, pour trouver le parfum ou le soin qui lui ressemble.</p>
       </div>
+      <ul class="values">
+        <li><strong>Ingrédients naturels</strong><span>Nombreuses références bio et vegan</span></li>
+        <li><strong>Testés dermatologiquement</strong><span>pH équilibré, pour tous types de peau</span></li>
+        <li><strong>Sans parabènes</strong><span>Des formules plus douces</span></li>
+        <li><strong>Non testés sur les animaux</strong><span>Une beauté responsable</span></li>
+      </ul>
     </div>
-    <p class="count" id="count"></p>
-    <div class="product-grid" id="productGrid"></div>
   </section>
 
   <section id="contact" class="section contact">
-    <h2 class="script section-title">Un parfum vous intéresse ?</h2>
+    <h2 class="script section-title">Nous contacter</h2>
     <p class="lead-center">Ce site est une vitrine : aucune vente en ligne. Écrivez-nous pour un conseil, un échantillon ou une commande.</p>
     <div class="contact-card">
       <span class="caps-label">Par e-mail</span>

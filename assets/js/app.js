@@ -2,19 +2,63 @@
   const $ = (sel) => document.querySelector(sel);
   const echapper = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const euros = (v) => v == null ? "Prix sur demande" : (Number.isInteger(v) ? v : v.toFixed(2).replace(".", ",")) + " €";
-  const parRef = Object.fromEntries(PRODUITS.map((p, i) => [p.ref, i]));
+  const arrondi = (v) => Math.round(v * 100) / 100;
   const sansAccent = (t) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  const parRef = Object.fromEntries(PRODUITS.map((p, i) => [p.ref, i]));
+  const parfumParRef = Object.fromEntries(PARFUMS.map((p, i) => [p.ref, i]));
+
+  // Petite illustration SVG selon le type de produit (pas d'images externes).
+  function visuel(forme, teinte) {
+    const formes = {
+      flacon: '<rect x="40" y="10" width="20" height="14" rx="3" fill="#b98a5e"/><rect x="45" y="22" width="10" height="8" fill="#9a6f48"/><rect x="24" y="30" width="52" height="60" rx="12" fill="TEINTE"/><rect x="32" y="38" width="9" height="42" rx="4.5" fill="#fff" opacity=".4"/>',
+      spray: '<rect x="42" y="8" width="16" height="10" rx="2" fill="#b98a5e"/><rect x="58" y="11" width="10" height="4" fill="#9a6f48"/><rect x="40" y="18" width="20" height="10" fill="#9a6f48"/><rect x="28" y="28" width="44" height="64" rx="10" fill="TEINTE"/><rect x="35" y="36" width="8" height="46" rx="4" fill="#fff" opacity=".4"/>',
+      jar:   '<rect x="22" y="34" width="56" height="14" rx="3" fill="#b98a5e"/><rect x="24" y="48" width="52" height="40" rx="8" fill="TEINTE"/><rect x="32" y="56" width="36" height="16" rx="3" fill="#fff" opacity=".45"/>',
+      tube:  '<path d="M34 14h32l-4 66H38z" fill="TEINTE"/><rect x="38" y="80" width="24" height="12" rx="3" fill="#b98a5e"/><rect x="34" y="12" width="32" height="5" fill="#9a6f48"/>',
+      pump:  '<rect x="46" y="8" width="20" height="6" rx="2" fill="#b98a5e"/><rect x="46" y="10" width="6" height="22" fill="#b98a5e"/><rect x="40" y="30" width="20" height="10" fill="#9a6f48"/><rect x="30" y="40" width="40" height="52" rx="8" fill="TEINTE"/>'
+    };
+    return '<svg viewBox="0 0 100 100" aria-hidden="true">' + (formes[forme] || formes.pump).replace(/TEINTE/g, teinte) + '</svg>';
+  }
+  const TEINTES_GENRE = { Femme: "#d9b0c4", Homme: "#c9b2a8", Mixte: "#d7a98c", Enfant: "#b9cdd3" };
+  const labels = (p) => (p.bio ? '<span class="tag">Bio</span>' : '') + (p.vegan ? '<span class="tag">Vegan</span>' : '');
+
+  // ——— Onglets Parfums / Soins ———
+  function onglet(nom) {
+    const parfums = nom === "parfums";
+    $("#tabParfums").setAttribute("aria-selected", parfums);
+    $("#tabSoins").setAttribute("aria-selected", !parfums);
+    $("#panelParfums").hidden = !parfums;
+    $("#panelSoins").hidden = parfums;
+  }
+  $("#tabParfums").addEventListener("click", () => onglet("parfums"));
+  $("#tabSoins").addEventListener("click", () => onglet("soins"));
+
+  // ——— Best-sellers ———
+  $("#bestGrid").innerHTML = BEST_SELLERS.map((code) => {
+    const [type, ref] = code.split(":");
+    if (type === "p") {
+      const i = parfumParRef[ref], p = PARFUMS[i];
+      if (p == null) return "";
+      return '<button class="best" data-p="' + i + '"><span class="best-visual" style="--tint:' + TEINTES_GENRE[p.genre] + '">' + visuel("flacon", TEINTES_GENRE[p.genre]) + '</span>' +
+        '<span class="card-cat g-' + p.genre + '">Parfum ' + p.genre.toLowerCase() + '</span><span class="best-name">' + echapper(p.nom) + '</span>' +
+        (AFFICHER_PRIX ? '<span class="best-price">dès ' + euros(p.prix15 || p.prixGrand) + '</span>' : '') + '</button>';
+    }
+    const i = parRef[ref], p = PRODUITS[i];
+    if (p == null) return "";
+    const u = UNIVERS[p.univers];
+    return '<button class="best" data-i="' + i + '"><span class="best-visual" style="--tint:' + u.teinte + '">' + visuel(u.forme, u.teinte) + '</span>' +
+      '<span class="card-cat">' + echapper(u.nom) + '</span><span class="best-name">' + echapper(p.nom) + '</span>' +
+      (AFFICHER_PRIX ? '<span class="best-price">' + euros(p.prix) + '</span>' : '') + '</button>';
+  }).join("");
 
   // ——— Parfums ———
   const pFiltre = { genre: "Tous", gamme: "toutes" };
-  const genresChips = ["Tous", "Femme", "Homme", "Mixte"];
-  const gammesChips = [["toutes", "Toutes les gammes"]].concat(Object.entries(GAMMES).map(([k, g]) => [k, g.nom]));
-  $("#pGenres").innerHTML = genresChips.map((g) => '<button class="chip" data-c="' + g + '">' + g + '</button>').join("");
-  $("#pGammes").innerHTML = gammesChips.map(([k, n]) => '<button class="chip" data-c="' + k + '">' + n + '</button>').join("");
+  $("#pGenres").innerHTML = ["Tous", "Femme", "Homme", "Mixte"].map((g) => '<button class="chip" data-c="' + g + '">' + g + '</button>').join("");
+  $("#pGammes").innerHTML = [["toutes", "Toutes les gammes"]].concat(Object.entries(GAMMES).map(([k, g]) => [k, g.nom]))
+    .map(([k, n]) => '<button class="chip" data-c="' + k + '">' + n + '</button>').join("");
 
   function enTete(gamme, genre) {
     const g = GAMMES[gamme];
-    let prix = "";
+    let prix;
     if (gamme === "classique") prix = "35 € les 70 ml · 11,90 € les 15 ml<small>Hors frais de port</small>";
     else if (gamme === "luxe") prix = "70 ml · 15 ml";
     else if (gamme === "luxury") prix = "50 ml · 15 ml";
@@ -50,63 +94,18 @@
     });
     $("#pListe").innerHTML = groupes.join("") || '<p class="empty">Aucun parfum ne correspond à votre recherche.</p>';
   }
-
   $("#pGenres").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (b) { pFiltre.genre = b.dataset.c; afficherParfums(); } });
   $("#pGammes").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (b) { pFiltre.gamme = b.dataset.c; afficherParfums(); } });
   $("#pSearch").addEventListener("input", afficherParfums);
 
-  // ——— Étuis ———
   $("#etuisGrid").innerHTML = ETUIS.map((e) =>
     '<div class="etui"><span class="etui-tube" style="--c:' + e.couleur + '"></span><strong>' + echapper(e.nom) + '</strong>' +
     (AFFICHER_PRIX ? '<b>' + euros(e.prix) + '</b>' : '') + '<span>' + e.ref + '</span></div>'
   ).join("");
 
   // ——— Soins ———
-  function visuel(forme, teinte) {
-    const formes = {
-      spray: '<rect x="42" y="8" width="16" height="10" rx="2" fill="#b98a5e"/><rect x="58" y="11" width="10" height="4" fill="#9a6f48"/><rect x="40" y="18" width="20" height="10" fill="#9a6f48"/><rect x="28" y="28" width="44" height="64" rx="10" fill="TEINTE"/><rect x="35" y="36" width="8" height="46" rx="4" fill="#fff" opacity=".4"/>',
-      jar:   '<rect x="22" y="34" width="56" height="14" rx="3" fill="#b98a5e"/><rect x="24" y="48" width="52" height="40" rx="8" fill="TEINTE"/><rect x="32" y="56" width="36" height="16" rx="3" fill="#fff" opacity=".45"/>',
-      tube:  '<path d="M34 14h32l-4 66H38z" fill="TEINTE"/><rect x="38" y="80" width="24" height="12" rx="3" fill="#b98a5e"/><rect x="34" y="12" width="32" height="5" fill="#9a6f48"/>',
-      pump:  '<rect x="46" y="8" width="20" height="6" rx="2" fill="#b98a5e"/><rect x="46" y="10" width="6" height="22" fill="#b98a5e"/><rect x="40" y="30" width="20" height="10" fill="#9a6f48"/><rect x="30" y="40" width="40" height="52" rx="8" fill="TEINTE"/>'
-    };
-    return '<svg viewBox="0 0 100 100" aria-hidden="true">' + (formes[forme] || formes.pump).replace(/TEINTE/g, teinte) + '</svg>';
-  }
-  const labels = (p) => (p.bio ? '<span class="tag">Bio</span>' : '') + (p.vegan ? '<span class="tag">Vegan</span>' : '');
-
-  $("#universeGrid").innerHTML = Object.entries(UNIVERS).map(([cle, u]) => {
-    const n = PRODUITS.filter((p) => p.univers === cle).length;
-    return '<a class="universe" href="#catalogue" data-cat="' + cle + '">' +
-      '<div class="universe-visual" style="--tint:' + u.teinte + '">' + visuel(u.forme, u.teinte) + '</div>' +
-      '<h3>' + echapper(u.nom) + '</h3><p>' + echapper(u.texte) + '</p>' +
-      '<span class="universe-count">' + n + ' produit' + (n > 1 ? 's' : '') + ' →</span></a>';
-  }).join("");
-
-  $("#mists").innerHTML = PRODUITS.filter((p) => p.notes).map((p) =>
-    '<button class="mist" data-i="' + parRef[p.ref] + '"><h3>' + echapper(p.nom.replace("Brume corps ", "")) + '</h3>' +
-    '<dl><dt>Tête</dt><dd>' + echapper(p.notes.tete) + '</dd><dt>Cœur</dt><dd>' + echapper(p.notes.coeur) + '</dd>' +
-    '<dt>Fond</dt><dd>' + echapper(p.notes.fond) + '</dd></dl>' +
-    (AFFICHER_PRIX ? '<span class="mist-price">' + euros(p.prix) + '</span>' : '') + '<span class="mist-ref">' + p.ref + '</span></button>'
-  ).join("");
-
-  const motCle = (nom) => nom.toLowerCase().replace(" vera", "");
-  $("#ingredientsGrid").innerHTML = INGREDIENTS.map((ing) => {
-    const n = PRODUITS.filter((p) => (p.actifs + " " + p.nom).toLowerCase().includes(motCle(ing.nom))).length;
-    return '<button class="ingredient" data-q="' + echapper(motCle(ing.nom)) + '"><h3>' + echapper(ing.nom) + '</h3>' +
-      '<p>' + echapper(ing.texte) + '</p><span class="universe-count">' + n + ' soins →</span></button>';
-  }).join("");
-
-  const etape = (ref, label) => {
-    const p = PRODUITS[parRef[ref]];
-    return '<li><button class="step" data-i="' + parRef[ref] + '">' + (label ? '<em>' + label + '</em>' : '') +
-      '<span class="step-name">' + echapper(p.nom) + '</span><span class="step-ref">' + ref + '</span></button></li>';
-  };
-  $("#routinesGrid").innerHTML = ROUTINES.map((r) =>
-    '<article class="routine"><h3>' + echapper(r.nom) + '</h3><ol>' + r.etapes.map((ref) => etape(ref)).join("") + '</ol>' +
-    '<ul class="routine-mask">' + etape(r.masque, "Masque, 2 fois par semaine") + '</ul></article>'
-  ).join("");
-
   const filtre = { univers: "tout", rubrique: "toutes" };
-  $("#chips").innerHTML = [["tout", "Tout"]].concat(Object.entries(UNIVERS).map(([k, u]) => [k, u.nom]))
+  $("#chips").innerHTML = [["tout", "Tous les soins"]].concat(Object.entries(UNIVERS).map(([k, u]) => [k, u.nom]))
     .map(([k, nom]) => '<button class="chip" data-cat="' + k + '">' + echapper(nom) + '</button>').join("");
 
   function remplirRubriques() {
@@ -136,21 +135,39 @@
         '</div></article>';
     }).join("") : '<p class="empty">Aucun soin ne correspond à votre recherche.</p>';
   }
-
   function choisirUnivers(cat) { filtre.univers = cat; remplirRubriques(); afficherSoins(); }
   $("#chips").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (b) choisirUnivers(b.dataset.cat); });
   $("#rubrique").addEventListener("change", (e) => { filtre.rubrique = e.target.value; afficherSoins(); });
   ["#search", "#fBio", "#fVegan"].forEach((s) => $(s).addEventListener("input", afficherSoins));
-  $("#universeGrid").addEventListener("click", (e) => { const a = e.target.closest(".universe"); if (a) { $("#search").value = ""; choisirUnivers(a.dataset.cat); } });
+
+  // ——— Ingrédients & routines ———
+  const motCle = (nom) => nom.toLowerCase().replace(" vera", "");
+  $("#ingredientsGrid").innerHTML = INGREDIENTS.map((ing) => {
+    const n = PRODUITS.filter((p) => (p.actifs + " " + p.nom).toLowerCase().includes(motCle(ing.nom))).length;
+    return '<button class="ingredient" data-q="' + echapper(motCle(ing.nom)) + '"><h3>' + echapper(ing.nom) + '</h3>' +
+      '<p>' + echapper(ing.texte) + '</p><span class="more">' + n + ' soins →</span></button>';
+  }).join("");
   $("#ingredientsGrid").addEventListener("click", (e) => {
     const b = e.target.closest(".ingredient");
     if (!b) return;
+    onglet("soins");
     $("#search").value = b.dataset.q;
+    $("#fBio").checked = $("#fVegan").checked = false;
     choisirUnivers("tout");
-    $("#catalogue").scrollIntoView({ behavior: "smooth" });
+    $("#categories").scrollIntoView({ behavior: "smooth" });
   });
 
-  // ——— Fiches ———
+  const etape = (ref, label) => {
+    const p = PRODUITS[parRef[ref]];
+    return '<li><button class="step" data-i="' + parRef[ref] + '">' + (label ? '<em>' + label + '</em>' : '') +
+      '<span class="step-name">' + echapper(p.nom) + '</span><span class="step-ref">' + ref + '</span></button></li>';
+  };
+  $("#routinesGrid").innerHTML = ROUTINES.map((r) =>
+    '<article class="routine"><h3>' + echapper(r.nom) + '</h3><ol>' + r.etapes.map((ref) => etape(ref)).join("") + '</ol>' +
+    '<ul class="routine-mask">' + etape(r.masque, "Masque, 2 fois par semaine") + '</ul></article>'
+  ).join("");
+
+  // ——— Fiches produit ———
   const modal = $("#modal");
   const ligne = (label, val, fort) => val ? '<dt>' + label + '</dt><dd' + (fort ? ' class="strong"' : '') + '>' + echapper(val) + '</dd>' : '';
   function montrer(html) { $("#modalBody").innerHTML = html; modal.hidden = false; document.body.style.overflow = "hidden"; }
@@ -168,10 +185,11 @@
   }
 
   function ouvrirParfum(i) {
-    const p = PARFUMS[i], g = GAMMES[p.gamme];
+    const p = PARFUMS[i], g = GAMMES[p.gamme], t = TEINTES_GENRE[p.genre];
     const formats = ligne(p.grand, AFFICHER_PRIX ? euros(p.prixGrand) + (p.gamme === "classique" ? " (hors frais de port)" : "") : "Disponible", true) +
       (p.ref15 ? ligne("15 ml", AFFICHER_PRIX ? euros(p.prix15) : "Disponible", true) : "");
-    montrer('<span class="card-cat g-' + p.genre + '">' + echapper(p.genre) + ' · ' + echapper(g.nom) + '</span>' +
+    montrer('<div class="modal-visual" style="--tint:' + t + '">' + visuel("flacon", t) + '</div>' +
+      '<span class="card-cat g-' + p.genre + '">' + echapper(p.genre) + ' · ' + echapper(g.nom) + '</span>' +
       '<h3 id="modalTitle">' + echapper(p.nom) + '</h3><dl>' + ligne("Famille", p.famille) + ligne("Inspiration", p.inspiration) + formats + '</dl>' +
       '<div class="add-row"><button class="btn btn-plum btn-add" data-add="p:' + i + ':' + p.grand + '">Ajouter ' + p.grand + '</button>' +
       (p.ref15 ? '<button class="btn btn-line btn-add" data-add="p:' + i + ':15 ml">Ajouter 15 ml</button>' : '') + '</div>' +
@@ -180,21 +198,24 @@
 
   function fermer() { modal.hidden = true; document.body.style.overflow = ""; }
   document.addEventListener("click", (e) => {
-    if (modal.contains(e.target) || e.target.closest(".drawer, .finder")) return;
-    const s = e.target.closest(".card, .mist, .step");
+    if (modal.contains(e.target) || e.target.closest(".drawer, .search-panel")) return;
+    const s = e.target.closest(".card, .step, .best[data-i]");
     if (s) return ouvrirSoin(+s.dataset.i);
-    const p = e.target.closest(".p-item");
+    const p = e.target.closest(".p-item, .best[data-p]");
     if (p) ouvrirParfum(+p.dataset.p);
   });
   $("#productGrid").addEventListener("keydown", (e) => { const c = e.target.closest(".card"); if (c && e.key === "Enter") ouvrirSoin(+c.dataset.i); });
-  modal.addEventListener("click", (e) => { if (e.target === modal || e.target.closest(".modal-close") || e.target.closest(".modal-cta")) fermer(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) fermer(); });
+  modal.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-add]");
+    if (b) ajouter(b.dataset.add);
+    if (b || e.target === modal || e.target.closest(".modal-close") || e.target.closest(".modal-cta")) fermer();
+  });
 
-  // ——— Recherche directe (nom ou inspiration) ———
-  const INDEX = PARFUMS.map((p, i) => ({ type: "p", i, nom: p.nom, meta: p.genre + " · " + GAMMES[p.gamme].nom, inspiration: p.inspiration, ref: p.ref + " " + (p.ref15 || "") }))
+  // ——— Recherche directe (icône loupe) : nom ou inspiration ———
+  const INDEX = PARFUMS.map((p, i) => ({ type: "p", i, nom: p.nom, meta: "Parfum " + p.genre.toLowerCase() + " · " + GAMMES[p.gamme].nom, inspiration: p.inspiration, ref: p.ref + " " + (p.ref15 || "") }))
     .concat(PRODUITS.map((p, i) => ({ type: "s", i, nom: p.nom, meta: UNIVERS[p.univers].nom + " · " + p.rubrique, inspiration: p.inspiration, ref: p.ref })));
   INDEX.forEach((x) => { x.cleNom = sansAccent(x.nom); x.cleInsp = sansAccent(x.inspiration || ""); x.cleRef = sansAccent(x.ref); });
-  const finder = $("#finder"), fList = $("#finderList");
+  const finder = $("#finder"), fList = $("#finderList"), panel = $("#searchPanel"), searchBtn = $("#searchBtn");
   let resultats = [], choisi = 0;
 
   function chercher(q) {
@@ -215,22 +236,23 @@
   function montrerResultats() {
     resultats = chercher(finder.value);
     choisi = 0;
-    if (finder.value.trim().length < 2) { fList.hidden = true; finder.setAttribute("aria-expanded", "false"); return; }
+    if (finder.value.trim().length < 2) { fList.hidden = true; return; }
     fList.innerHTML = resultats.length ? resultats.map((x, k) =>
       '<li role="option" data-k="' + k + '" aria-selected="' + (k === 0) + '"><span class="f-name">' + echapper(x.nom) + '</span>' +
       '<span class="f-meta">' + echapper(x.meta) + (x.inspiration ? ' · inspiration <b>' + echapper(x.inspiration) + '</b>' : '') + '</span></li>'
     ).join("") : '<li class="finder-empty">Aucun produit trouvé. Essayez un autre nom ou une autre inspiration.</li>';
     fList.hidden = false;
-    finder.setAttribute("aria-expanded", "true");
   }
+  function ouvrirRecherche() { panel.hidden = false; searchBtn.setAttribute("aria-expanded", "true"); finder.focus(); }
+  function fermerRecherche() { panel.hidden = true; fList.hidden = true; finder.value = ""; searchBtn.setAttribute("aria-expanded", "false"); }
+  searchBtn.addEventListener("click", () => (panel.hidden ? ouvrirRecherche() : fermerRecherche()));
+
   function allerA(x) {
-    fList.hidden = true;
-    finder.value = "";
-    finder.blur();
+    fermerRecherche();
     if (x.type === "p") {
-      pFiltre.genre = "Tous"; pFiltre.gamme = "toutes"; $("#pSearch").value = ""; afficherParfums();
+      onglet("parfums"); pFiltre.genre = "Tous"; pFiltre.gamme = "toutes"; $("#pSearch").value = ""; afficherParfums();
     } else {
-      $("#search").value = ""; $("#fBio").checked = $("#fVegan").checked = false; choisirUnivers("tout");
+      onglet("soins"); $("#search").value = ""; $("#fBio").checked = $("#fVegan").checked = false; choisirUnivers("tout");
     }
     const el = document.getElementById((x.type === "p" ? "parfum-" : "soin-") + x.i);
     el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -240,28 +262,27 @@
   }
   finder.addEventListener("input", montrerResultats);
   finder.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") return fermerRecherche();
     if (fList.hidden || !resultats.length) return;
     if (e.key === "ArrowDown" || e.key === "ArrowUp") {
       e.preventDefault();
       choisi = (choisi + (e.key === "ArrowDown" ? 1 : resultats.length - 1)) % resultats.length;
       fList.querySelectorAll("li").forEach((li, k) => li.setAttribute("aria-selected", k === choisi));
     } else if (e.key === "Enter") { e.preventDefault(); allerA(resultats[choisi]); }
-    else if (e.key === "Escape") fList.hidden = true;
   });
   fList.addEventListener("mousedown", (e) => { const li = e.target.closest("li[data-k]"); if (li) { e.preventDefault(); allerA(resultats[+li.dataset.k]); } });
-  finder.addEventListener("blur", () => setTimeout(() => (fList.hidden = true), 150));
-  finder.addEventListener("focus", () => { if (finder.value.trim().length >= 2) montrerResultats(); });
+  document.addEventListener("click", (e) => { if (!panel.hidden && !e.target.closest(".search-panel, #searchBtn")) fermerRecherche(); });
 
   // ——— Panier (simulation, aucun achat) ———
   const CLE = "aw-panier";
   let panier = [];
   try { panier = JSON.parse(localStorage.getItem(CLE)) || []; } catch (e) { panier = []; }
+  panier = panier.filter((x) => (x.type === "p" ? PARFUMS[x.i] : PRODUITS[x.i]));
   const sauver = () => { try { localStorage.setItem(CLE, JSON.stringify(panier)); } catch (e) { /* stockage indisponible : le panier reste en mémoire */ } };
 
   function detail(it) {
     if (it.type === "p") {
-      const p = PARFUMS[it.i];
-      const est15 = it.format === "15 ml";
+      const p = PARFUMS[it.i], est15 = it.format === "15 ml";
       return { nom: p.nom, ref: est15 ? p.ref15 : p.ref, prix: est15 ? p.prix15 : p.prixGrand };
     }
     const p = PRODUITS[it.i];
@@ -280,25 +301,27 @@
   function dessinerPanier() {
     const n = panier.reduce((s, x) => s + x.qte, 0);
     $("#cartCount").textContent = n;
+    $("#cartCount").hidden = n === 0;
     let total = 0, surDemande = false;
     $("#cartList").innerHTML = panier.length ? panier.map((it, k) => {
       const d = detail(it);
       if (d.prix == null) surDemande = true; else total += d.prix * it.qte;
       return '<li class="cart-item"><span class="ci-name">' + echapper(d.nom) + '</span>' +
-        '<span class="ci-price">' + (d.prix == null ? "Sur demande" : euros(Math.round(d.prix * it.qte * 100) / 100)) + '</span>' +
+        '<span class="ci-price">' + (d.prix == null ? "Sur demande" : euros(arrondi(d.prix * it.qte))) + '</span>' +
         '<span class="ci-meta">' + echapper(it.format) + ' · réf. ' + echapper(d.ref) + '</span>' +
         '<span class="ci-qty"><button data-q="' + k + ':-1" aria-label="Retirer un">−</button><span>' + it.qte + '</span><button data-q="' + k + ':1" aria-label="Ajouter un">+</button></span></li>';
     }).join("") : '<li class="cart-empty">Votre panier est vide.<br />Ouvrez la fiche d\'un produit pour l\'ajouter.</li>';
     if (!panier.length) { $("#cartFoot").innerHTML = ""; return; }
+    total = arrondi(total);
     const lignes = panier.map((it) => { const d = detail(it); return "- " + d.nom + " (" + it.format + ", réf. " + d.ref + ") x" + it.qte; });
-    const corps = "Bonjour,\n\nVoici ma sélection :\n" + lignes.join("\n") + "\n\nTotal estimé : " + euros(Math.round(total * 100) / 100) + (surDemande ? " (+ articles sur demande)" : "") + "\n\nMerci !";
-    $("#cartFoot").innerHTML = '<div class="total"><span>Total estimé</span><strong>' + euros(Math.round(total * 100) / 100) + '</strong></div>' +
+    const corps = "Bonjour,\n\nVoici ma sélection :\n" + lignes.join("\n") + "\n\nTotal estimé : " + euros(total) + (surDemande ? " (+ articles sur demande)" : "") + "\n\nMerci !";
+    $("#cartFoot").innerHTML = '<div class="total"><span>Total estimé</span><strong>' + euros(total) + '</strong></div>' +
       '<p class="foot-note">Hors frais de port' + (surDemande ? ", hors articles dont le prix est sur demande" : "") + '. Ce total est une estimation : aucun paiement n\'est possible ici.</p>' +
       '<a class="btn btn-plum" href="mailto:kururo.f@gmail.com?subject=' + encodeURIComponent("Ma sélection AW Parfumerie") + '&body=' + encodeURIComponent(corps) + '">Envoyer ma sélection par e-mail</a>' +
       '<button class="link-btn" id="cartClear">Vider le panier</button>';
   }
   const drawer = $("#drawer"), drawerBg = $("#drawerBg");
-  function ouvrirPanier() { drawer.hidden = drawerBg.hidden = false; document.body.style.overflow = "hidden"; $("#drawerClose").focus(); }
+  function ouvrirPanier() { fermerRecherche(); drawer.hidden = drawerBg.hidden = false; document.body.style.overflow = "hidden"; $("#drawerClose").focus(); }
   function fermerPanier() { drawer.hidden = drawerBg.hidden = true; document.body.style.overflow = ""; }
   $("#cartBtn").addEventListener("click", ouvrirPanier);
   $("#drawerClose").addEventListener("click", fermerPanier);
@@ -313,11 +336,15 @@
     }
     if (e.target.id === "cartClear") { panier = []; sauver(); dessinerPanier(); }
   });
-  modal.addEventListener("click", (e) => { const b = e.target.closest("[data-add]"); if (b) { ajouter(b.dataset.add); fermer(); } });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !drawer.hidden) fermerPanier(); });
-  dessinerPanier();
 
-  // Menu mobile
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (!modal.hidden) fermer();
+    else if (!drawer.hidden) fermerPanier();
+    else if (!panel.hidden) fermerRecherche();
+  });
+
+  // ——— Menu mobile ———
   const toggle = $(".menu-toggle");
   toggle.addEventListener("click", () => { const o = document.body.classList.toggle("nav-open"); toggle.setAttribute("aria-expanded", o); });
   document.querySelectorAll(".nav a").forEach((a) => a.addEventListener("click", () => document.body.classList.remove("nav-open")));
@@ -325,4 +352,5 @@
   afficherParfums();
   remplirRubriques();
   afficherSoins();
+  dessinerPanier();
 })();
