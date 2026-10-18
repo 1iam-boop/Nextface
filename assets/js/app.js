@@ -147,7 +147,7 @@
 
   function ouvrirSoin(i) {
     const p = PRODUITS[i], u = UNIVERS[p.univers];
-    montrer('<div class="modal-visual" style="--tint:' + u.teinte + '">' + photo(p, u.forme, u.teinte) + '</div>' +
+    montrer('<div class="modal-visual' + (p.image ? ' has-photo' : '') + '" style="--tint:' + u.teinte + '">' + photo(p, u.forme, u.teinte) + '</div>' +
       '<span class="card-cat">' + echapper(u.nom) + ' · ' + echapper(p.rubrique) + '</span><h3 id="modalTitle">' + echapper(p.nom) + '</h3>' +
       '<div class="modal-tags">' + labels(p) + '</div><dl>' +
       (p.famille ? ligne("Famille", p.famille) + ligne("Pièce conseillée", p.piece) : ligne(p.univers === "maison" ? "Description" : "Actifs", p.actifs)) +
@@ -162,7 +162,7 @@
     const p = PARFUMS[i], g = GAMMES[p.gamme], t = TEINTES_GENRE[p.genre];
     const formats = ligne(p.grand, AFFICHER_PRIX ? euros(p.prixGrand) + (p.gamme === "classique" ? " (hors frais de port)" : "") : "Disponible", true) +
       (p.ref15 ? ligne("15 ml", AFFICHER_PRIX ? euros(p.prix15) : "Disponible", true) : "");
-    montrer('<div class="modal-visual" style="--tint:' + t + '">' + photo(p, "flacon", t) + '</div>' +
+    montrer('<div class="modal-visual' + (p.image ? ' has-photo' : '') + '" style="--tint:' + t + '">' + photo(p, "flacon", t) + '</div>' +
       '<span class="card-cat g-' + p.genre + '">' + echapper(p.genre) + ' · ' + echapper(g.nom) + '</span>' +
       '<h3 id="modalTitle">' + echapper(p.nom) + '</h3><dl>' + ligne("Famille", p.famille) + ligne("Inspiration", p.inspiration) + formats + '</dl>' +
       '<div class="add-row"><button class="btn btn-plum btn-add" data-add="p:' + i + ':' + p.grand + '">Ajouter ' + p.grand + '</button>' +

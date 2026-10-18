@@ -273,7 +273,7 @@ PRODUITS.forEach((p) => { if (INSPIRATIONS_SOINS[p.ref]) p.inspiration = INSPIRA
 
 // Photos des produits (dossier assets/img)
 PRODUITS.forEach((p) => {
-  if (/^SBM00[1-5]$/.test(p.ref)) p.image = "assets/img/brume-" + p.ref.toLowerCase() + ".jpg";
-  if (p.rubrique === "Diffuseurs d'ambiance") p.image = "assets/img/diffuseur.jpg";
-  if (p.rubrique === "Sprays d'ambiance") p.image = "assets/img/spray-ambiance.jpg";
+  if (/^SBM00[1-5]$/.test(p.ref)) p.image = "assets/img/brume-" + p.ref.toLowerCase() + ".png";
+  if (p.rubrique === "Diffuseurs d'ambiance") p.image = "assets/img/diffuseur.png";
+  if (p.rubrique === "Sprays d'ambiance") p.image = "assets/img/spray-ambiance.png";
 });

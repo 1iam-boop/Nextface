@@ -244,7 +244,8 @@ img, svg { display: block; max-width: 100%; }
 .cart-count[hidden] { display: none; }
 @media (max-width: 960px) { .best-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .best { padding: 1rem .7rem 1.1rem; border-radius: 22px; } .best-visual { width: 80px; height: 80px; padding: 10px; } .best-name { font-size: 1.2rem; } }
-.best-visual.has-photo { width: 100%; height: 190px; padding: 10px; border-radius: 20px; }
-.best-visual img { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; }
+.best-visual.has-photo { width: 100%; height: 200px; padding: 16px; border-radius: 20px; background: #fff; }
+.best-visual img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(60,40,30,.16)); }
+.modal-visual img { display: block; height: 184px; width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 10px 12px rgba(60,40,30,.16)); }
 @media (max-width: 480px) { .best-visual.has-photo { height: 140px; } }
-.modal-visual img { height: 150px; width: auto; max-width: 90%; object-fit: contain; border-radius: 14px; }
+.modal-visual.has-photo { height: 220px; padding: 18px; background: #fff; }

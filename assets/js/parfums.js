@@ -113,8 +113,8 @@ PARFUMS.forEach((p) => { if (INSPIRATIONS[p.ref]) p.inspiration = INSPIRATIONS[p
 
 // Photos des flacons : flacon blanc pour la femme, flacon noir pour l'homme et le mixte.
 PARFUMS.forEach((p) => {
-  if (p.genre === "Femme") p.image = "assets/img/parfum-femme.jpg";
-  if (p.genre === "Homme" || p.genre === "Mixte") p.image = "assets/img/parfum-homme-mixte.jpg";
+  if (p.genre === "Femme") p.image = "assets/img/parfum-femme.png";
+  if (p.genre === "Homme" || p.genre === "Mixte") p.image = "assets/img/parfum-homme-mixte.png";
 });
 
 // Best-sellers affichés en haut du site : "p:" + référence parfum, ou "s:" + référence soin.
