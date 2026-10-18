@@ -12,6 +12,7 @@ const AFFICHER_PRIX = true;
 
 const UNIVERS = {
   brumes:  { nom: "Brumes corps",   forme: "spray",  teinte: "#e7b48f", texte: "Sprays corps parfumés au complexe PUREYOUTH™ : hydratent, exfolient en douceur et parfument." },
+  maison:  { nom: "Maison",              forme: "spray",  teinte: "#c8b39a", texte: "Diffuseurs à bâtons en bois et sprays d'ambiance pour parfumer chaque pièce." },
   corps:   { nom: "Corps & hygiène",     forme: "pump",   teinte: "#c9b6d9", texte: "Gels douche, crèmes, silhouette, déodorants, mains & pieds, savons, hygiène intime et dentaire." },
   visage:  { nom: "Visage",              forme: "jar",    teinte: "#e6cfa8", texte: "Crèmes, sérums, contours des yeux, nettoyants, toniques et masques." },
   rasage:  { nom: "Rasage",              forme: "tube",   teinte: "#8aa2b8", texte: "Crème à raser et soins après-rasage." },
@@ -252,3 +253,27 @@ const INSPIRATIONS_SOINS = {
   PC042B: "La Vie est Belle · Lancôme", CAP20B: "J'adore · Dior", CAP21B: "Alien · Thierry Mugler", CAP22B: "Hypnotic Poison · Dior", CAP23B: "La Vie est Belle · Lancôme"
 };
 PRODUITS.forEach((p) => { if (INSPIRATIONS_SOINS[p.ref]) p.inspiration = INSPIRATIONS_SOINS[p.ref]; });
+
+// ——— Maison : parfums d'ambiance ———
+// Les diffuseurs n'ont pas de référence connue : sansRef masque la référence interne.
+[["DIF100", "100 ml", 24], ["DIF200", "200 ml", 35], ["DIF500", "500 ml", 70]].forEach(([ref, format, prix]) => {
+  p(ref, "Diffuseur d'ambiance " + format, "Avec ses bâtons en bois", format, prix, "maison", "Diffuseurs d'ambiance", "");
+  Object.assign(PRODUITS[PRODUITS.length - 1], { sansRef: true });
+});
+[
+  ["COPS0006", "Fruity Delight",     "Fruité floral", "Salon, entrée",              "Bergamote, fruits verts, pêche, mandarine", "Jasmin, violette, muguet", "Vanille, musc, bois ambrés, bois de santal", "CCP0018"],
+  ["COPS0007", "Soft Hypnose",       "Fruité floral", "Chambre, salle de bain",     "Anis, pêche, coco", "Muguet, jasmin", "Crème, musc blanc, miel, benjoin, bois sucrés", "CCP0019"],
+  ["COPS0008", "Musk Ritual",        "Boisé musqué",  "Bureau, salon",              "Bergamote, citron", "Jasmin, pin, cassis", "Musc, bois secs, patchouli, muscs blancs", "CCP0020"],
+  ["COPS0009", "Sweet Symphonies",   "Fruité",        "Cuisine",                    "Citron, pomme, pêche", "Framboise, fleurs blanches, poire", "Vanille, patchouli", "CCP0021"],
+  ["COPS0010", "Whispering Woods",   "Agrumes boisé", "Open space, coin lecture",   "Bergamote", "Patchouli", "Bois de oud, ambre, musc", "CCP0022"]
+].forEach(([ref, nom, famille, piece, tete, coeur, fond, echantillon]) => {
+  p(ref, "Spray d'ambiance " + nom, famille + " · idéal pour : " + piece.toLowerCase(), "500 ml", 35, "maison", "Sprays d'ambiance", "");
+  Object.assign(PRODUITS[PRODUITS.length - 1], { famille, piece, echantillon, notes: { tete, coeur, fond } });
+});
+
+// Photos des produits (dossier assets/img)
+PRODUITS.forEach((p) => {
+  if (/^SBM00[1-5]$/.test(p.ref)) p.image = "assets/img/brume-" + p.ref.toLowerCase() + ".jpg";
+  if (p.rubrique === "Diffuseurs d'ambiance") p.image = "assets/img/diffuseur.jpg";
+  if (p.rubrique === "Sprays d'ambiance") p.image = "assets/img/spray-ambiance.jpg";
+});

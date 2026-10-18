@@ -6,6 +6,7 @@ Site vitrine (sans paiement, panier de simulation uniquement) : recherche direct
 - `assets/js/parfums.js` : **la liste des parfums** (une ligne = référence + nom ; prix à la fin pour Luxe et Luxury)
 - `assets/js/produits.js` : **la liste des soins** (source : AW Catalogue) ; mettre `AFFICHER_PRIX = false` pour masquer tous les prix
 - `assets/css/vitrine.css` : le style (crème, prune, taupe, brun)
+- `assets/img/` : photos des produits (flacons femme et homme/mixte, brumes, diffuseur, spray d'ambiance)
 
 ## Mise en ligne sur GitHub Pages
 Settings → Pages → Source : « Deploy from a branch » → branche `main`, dossier `/ (root)`.

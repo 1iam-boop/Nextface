@@ -18,6 +18,10 @@
     };
     return '<svg viewBox="0 0 100 100" aria-hidden="true">' + (formes[forme] || formes.pump).replace(/TEINTE/g, teinte) + '</svg>';
   }
+  // Photo du produit si elle existe, sinon l'illustration dessinée.
+  const photo = (p, forme, teinte) => p.image
+    ? '<img src="' + p.image + '" alt="' + echapper(p.nom) + '" loading="lazy" />'
+    : visuel(forme, teinte);
   const TEINTES_GENRE = { Femme: "#d9b0c4", Homme: "#c9b2a8", Mixte: "#d7a98c", Enfant: "#b9cdd3" };
   const labels = (p) => (p.bio ? '<span class="tag">Bio</span>' : '') + (p.vegan ? '<span class="tag">Vegan</span>' : '');
 
@@ -38,14 +42,14 @@
     if (type === "p") {
       const i = parfumParRef[ref], p = PARFUMS[i];
       if (p == null) return "";
-      return '<button class="best" data-p="' + i + '"><span class="best-visual" style="--tint:' + TEINTES_GENRE[p.genre] + '">' + visuel("flacon", TEINTES_GENRE[p.genre]) + '</span>' +
+      return '<button class="best" data-p="' + i + '"><span class="best-visual' + (p.image ? ' has-photo' : '') + '" style="--tint:' + TEINTES_GENRE[p.genre] + '">' + photo(p, "flacon", TEINTES_GENRE[p.genre]) + '</span>' +
         '<span class="card-cat g-' + p.genre + '">Parfum ' + p.genre.toLowerCase() + '</span><span class="best-name">' + echapper(p.nom) + '</span>' +
         (AFFICHER_PRIX ? '<span class="best-price">dès ' + euros(p.prix15 || p.prixGrand) + '</span>' : '') + '</button>';
     }
     const i = parRef[ref], p = PRODUITS[i];
     if (p == null) return "";
     const u = UNIVERS[p.univers];
-    return '<button class="best" data-i="' + i + '"><span class="best-visual" style="--tint:' + u.teinte + '">' + visuel(u.forme, u.teinte) + '</span>' +
+    return '<button class="best" data-i="' + i + '"><span class="best-visual' + (p.image ? ' has-photo' : '') + '" style="--tint:' + u.teinte + '">' + photo(p, u.forme, u.teinte) + '</span>' +
       '<span class="card-cat">' + echapper(u.nom) + '</span><span class="best-name">' + echapper(p.nom) + '</span>' +
       (AFFICHER_PRIX ? '<span class="best-price">' + euros(p.prix) + '</span>' : '') + '</button>';
   }).join("");
@@ -99,7 +103,7 @@
     const i = parRef[p.ref];
     return '<li><button class="p-item" id="soin-' + i + '" data-i="' + i + '"><span class="p-name">' + echapper(p.nom) +
       '<span class="p-fam">' + echapper(p.format) + (p.bio ? ' · Bio' : '') + (p.vegan ? ' · Vegan' : '') + '</span></span>' +
-      '<span class="p-ref">' + echapper(p.ref.split(" ")[0]) + '</span>' + (AFFICHER_PRIX ? '<span class="p-price">' + euros(p.prix) + '</span>' : '') + '</button></li>';
+      '<span class="p-ref">' + (p.sansRef ? '' : echapper(p.ref.split(" ")[0])) + '</span>' + (AFFICHER_PRIX ? '<span class="p-price">' + euros(p.prix) + '</span>' : '') + '</button></li>';
   }
   $("#sListe").innerHTML = Object.entries(UNIVERS).map(([cle, u]) => {
     const items = PRODUITS.filter((p) => p.univers === cle);
@@ -143,21 +147,22 @@
 
   function ouvrirSoin(i) {
     const p = PRODUITS[i], u = UNIVERS[p.univers];
-    montrer('<div class="modal-visual" style="--tint:' + u.teinte + '">' + visuel(u.forme, u.teinte) + '</div>' +
+    montrer('<div class="modal-visual" style="--tint:' + u.teinte + '">' + photo(p, u.forme, u.teinte) + '</div>' +
       '<span class="card-cat">' + echapper(u.nom) + ' · ' + echapper(p.rubrique) + '</span><h3 id="modalTitle">' + echapper(p.nom) + '</h3>' +
-      '<div class="modal-tags">' + labels(p) + '</div><dl>' + ligne("Actifs", p.actifs) +
+      '<div class="modal-tags">' + labels(p) + '</div><dl>' +
+      (p.famille ? ligne("Famille", p.famille) + ligne("Pièce conseillée", p.piece) : ligne(p.univers === "maison" ? "Description" : "Actifs", p.actifs)) +
       (p.notes ? ligne("Tête", p.notes.tete) + ligne("Cœur", p.notes.coeur) + ligne("Fond", p.notes.fond) : '') +
       ligne("Inspiration", p.inspiration) + ligne("Format", p.format) + (AFFICHER_PRIX ? ligne("Prix indicatif", euros(p.prix), true) : '') + '</dl>' +
       '<div class="add-row"><button class="btn btn-plum btn-add" data-add="s:' + i + ':' + echapper(p.format) + '">Ajouter au panier</button>' +
       '<a href="#contact" class="btn btn-line btn-add modal-cta">Demander un conseil</a></div>' +
-      '<p class="modal-ref">Référence ' + echapper(p.ref) + '</p>');
+      (p.sansRef ? '' : '<p class="modal-ref">Référence ' + echapper(p.ref) + (p.echantillon ? ' · échantillon : ' + echapper(p.echantillon) : '') + '</p>'));
   }
 
   function ouvrirParfum(i) {
     const p = PARFUMS[i], g = GAMMES[p.gamme], t = TEINTES_GENRE[p.genre];
     const formats = ligne(p.grand, AFFICHER_PRIX ? euros(p.prixGrand) + (p.gamme === "classique" ? " (hors frais de port)" : "") : "Disponible", true) +
       (p.ref15 ? ligne("15 ml", AFFICHER_PRIX ? euros(p.prix15) : "Disponible", true) : "");
-    montrer('<div class="modal-visual" style="--tint:' + t + '">' + visuel("flacon", t) + '</div>' +
+    montrer('<div class="modal-visual" style="--tint:' + t + '">' + photo(p, "flacon", t) + '</div>' +
       '<span class="card-cat g-' + p.genre + '">' + echapper(p.genre) + ' · ' + echapper(g.nom) + '</span>' +
       '<h3 id="modalTitle">' + echapper(p.nom) + '</h3><dl>' + ligne("Famille", p.famille) + ligne("Inspiration", p.inspiration) + formats + '</dl>' +
       '<div class="add-row"><button class="btn btn-plum btn-add" data-add="p:' + i + ':' + p.grand + '">Ajouter ' + p.grand + '</button>' +
@@ -253,7 +258,7 @@
       return { nom: p.nom, ref: est15 ? p.ref15 : p.ref, prix: est15 ? p.prix15 : p.prixGrand };
     }
     const p = PRODUITS[it.i];
-    return { nom: p.nom, ref: p.ref.split(" ")[0], prix: p.prix };
+    return { nom: p.nom, ref: p.sansRef ? "" : p.ref.split(" ")[0], prix: p.prix };
   }
   function ajouter(code) {
     const [type, i, format] = code.split(":");
@@ -275,12 +280,12 @@
       if (d.prix == null) surDemande = true; else total += d.prix * it.qte;
       return '<li class="cart-item"><span class="ci-name">' + echapper(d.nom) + '</span>' +
         '<span class="ci-price">' + (d.prix == null ? "Sur demande" : euros(arrondi(d.prix * it.qte))) + '</span>' +
-        '<span class="ci-meta">' + echapper(it.format) + ' · réf. ' + echapper(d.ref) + '</span>' +
+        '<span class="ci-meta">' + echapper(it.format) + (d.ref ? ' · réf. ' + echapper(d.ref) : '') + '</span>' +
         '<span class="ci-qty"><button data-q="' + k + ':-1" aria-label="Retirer un">−</button><span>' + it.qte + '</span><button data-q="' + k + ':1" aria-label="Ajouter un">+</button></span></li>';
     }).join("") : '<li class="cart-empty">Votre panier est vide.<br />Ouvrez la fiche d\'un produit pour l\'ajouter.</li>';
     if (!panier.length) { $("#cartFoot").innerHTML = ""; return; }
     total = arrondi(total);
-    const lignes = panier.map((it) => { const d = detail(it); return "- " + d.nom + " (" + it.format + ", réf. " + d.ref + ") x" + it.qte; });
+    const lignes = panier.map((it) => { const d = detail(it); return "- " + d.nom + " (" + it.format + (d.ref ? ", réf. " + d.ref : "") + ") x" + it.qte; });
     const corps = "Bonjour,\n\nVoici ma sélection :\n" + lignes.join("\n") + "\n\nTotal estimé : " + euros(total) + (surDemande ? " (+ articles sur demande)" : "") + "\n\nMerci !";
     $("#cartFoot").innerHTML = '<div class="total"><span>Total estimé</span><strong>' + euros(total) + '</strong></div>' +
       '<p class="foot-note">Hors frais de port' + (surDemande ? ", hors articles dont le prix est sur demande" : "") + '. Ce total est une estimation : aucun paiement n\'est possible ici.</p>' +
