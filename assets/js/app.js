@@ -289,7 +289,7 @@
     const corps = "Bonjour,\n\nVoici ma sélection :\n" + lignes.join("\n") + "\n\nTotal estimé : " + euros(total) + (surDemande ? " (+ articles sur demande)" : "") + "\n\nMerci !";
     $("#cartFoot").innerHTML = '<div class="total"><span>Total estimé</span><strong>' + euros(total) + '</strong></div>' +
       '<p class="foot-note">Hors frais de port' + (surDemande ? ", hors articles dont le prix est sur demande" : "") + '. Ce total est une estimation : aucun paiement n\'est possible ici.</p>' +
-      '<a class="btn btn-plum" href="mailto:kururo.f@gmail.com?subject=' + encodeURIComponent("Ma sélection AW Parfumerie") + '&body=' + encodeURIComponent(corps) + '">Envoyer ma sélection par e-mail</a>' +
+      '<a class="btn btn-plum" href="mailto:simaowilly@gmail.com,Arthur.brp09@gmail.com?subject=' + encodeURIComponent("Ma sélection AW Parfumerie") + '&body=' + encodeURIComponent(corps) + '">Envoyer ma sélection par e-mail</a>' +
       '<button class="link-btn" id="cartClear">Vider le panier</button>';
   }
   const drawer = $("#drawer"), drawerBg = $("#drawerBg");
