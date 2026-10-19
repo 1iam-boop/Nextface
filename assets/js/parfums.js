@@ -119,3 +119,41 @@ PARFUMS.forEach((p) => {
 
 // Best-sellers affichés en haut du site : "p:" + référence parfum, ou "s:" + référence soin.
 const BEST_SELLERS = ["p:006W", "p:001M", "p:007W", "p:002M", "p:055W", "p:118U", "s:SBM001", "s:CR17B"];
+
+// Familles olfactives (indicatives, déduites du parfum d'inspiration — à corriger si besoin).
+// Florale · Fruitée · Gourmande · Orientale · Boisée · Fraîche
+const FAMILLES_OLFACTIVES = {
+  Florale:   { texte: "Rose, jasmin, fleur d'oranger : l'élégance des bouquets.", couleur: "#e6b8c8" },
+  Fruitée:   { texte: "Poire, cassis, pêche : des sillages pétillants et joyeux.", couleur: "#f0b9a0" },
+  Gourmande: { texte: "Vanille, praline, café : des notes douces et addictives.", couleur: "#d9b48f" },
+  Orientale: { texte: "Ambre, épices, encens : chaleur et caractère.", couleur: "#c99a7a" },
+  Boisée:    { texte: "Cèdre, vétiver, oud, cuir : profondeur et élégance.", couleur: "#a89280" },
+  Fraîche:   { texte: "Agrumes, notes marines, aromatiques : la fraîcheur au quotidien.", couleur: "#a9c7cf" }
+};
+const FAMILLE_PAR_REF = {
+  "006W": "Orientale", "007W": "Florale", "010W": "Orientale", "011W": "Fraîche", "151W": "Orientale", "014W": "Orientale",
+  "019W": "Florale", "023W": "Gourmande", "024W": "Florale", "025W": "Florale", "026W": "Florale", "027W": "Florale",
+  "028W": "Gourmande", "029W": "Fraîche", "039W": "Fruitée", "040W": "Orientale", "153W": "Florale", "042W": "Gourmande",
+  "154W": "Florale", "047W": "Orientale", "049W": "Florale", "051W": "Florale", "053W": "Florale", "055W": "Gourmande",
+  "056W": "Orientale", "057W": "Florale", "156W": "Fruitée", "064W": "Orientale", "067W": "Orientale", "070W": "Orientale",
+  "071W": "Florale", "076W": "Fraîche", "158W": "Florale", "080W": "Fruitée", "081W": "Orientale", "082W": "Florale",
+  "085W": "Florale", "089W": "Fruitée", "090W": "Gourmande", "159W": "Fruitée", "096W": "Florale", "097W": "Gourmande",
+  "098W": "Florale", "115W": "Florale", "116W": "Gourmande", "119W": "Gourmande", "120W": "Gourmande", "121W": "Florale",
+  "133W": "Florale", "145W": "Gourmande", "148W": "Gourmande", "161W": "Gourmande",
+  "001M": "Orientale", "002M": "Fraîche", "003M": "Boisée", "004M": "Orientale", "150M": "Fraîche", "012M": "Fraîche",
+  "015M": "Fraîche", "016M": "Orientale", "152M": "Boisée", "018M": "Boisée", "020M": "Orientale", "021M": "Fraîche",
+  "022M": "Boisée", "030M": "Orientale", "032M": "Orientale", "033M": "Orientale", "037M": "Boisée", "038M": "Boisée",
+  "048M": "Orientale", "160M": "Boisée", "052M": "Fraîche", "061M": "Fraîche", "062M": "Boisée", "157M": "Orientale",
+  "069M": "Fraîche", "079M": "Boisée", "084M": "Fraîche", "086M": "Fraîche", "087M": "Orientale", "088M": "Orientale",
+  "091M": "Fraîche", "140M": "Orientale", "147M": "Boisée", "162M": "Orientale",
+  "155U": "Fraîche", "054U": "Orientale", "072U": "Boisée", "100U": "Boisée", "105U": "Gourmande",
+  "093W": "Fruitée", "122W": "Florale", "131W": "Gourmande", "132W": "Florale", "163W": "Florale",
+  "068M": "Fruitée", "094M": "Fraîche", "113M": "Fraîche", "136M": "Boisée", "164M": "Boisée",
+  "044U": "Fraîche", "073U": "Boisée", "099U": "Fraîche", "110U": "Fruitée", "114U": "Boisée", "135U": "Boisée", "142U": "Boisée",
+  "109W": "Florale", "123W": "Florale", "074M": "Boisée", "075M": "Orientale",
+  "101U": "Orientale", "102U": "Orientale", "106U": "Boisée", "111U": "Gourmande", "112U": "Fraîche", "117U": "Orientale",
+  "118U": "Orientale", "125U": "Fraîche", "126U": "Florale", "127U": "Boisée", "128U": "Gourmande", "129U": "Fruitée",
+  "130U": "Fraîche", "134U": "Fruitée", "137U": "Orientale", "139U": "Orientale", "143U": "Gourmande", "144U": "Gourmande",
+  "MULTIVERSE": "Boisée", "ASTRAL24": "Fruitée", "NADIR": "Orientale", "IMPERATRIX": "Fruitée"
+};
+PARFUMS.forEach((p) => { if (FAMILLE_PAR_REF[p.ref]) p.familleOlf = FAMILLE_PAR_REF[p.ref]; });

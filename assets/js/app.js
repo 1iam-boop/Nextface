@@ -25,16 +25,9 @@
   const TEINTES_GENRE = { Femme: "#d9b0c4", Homme: "#c9b2a8", Mixte: "#d7a98c", Enfant: "#b9cdd3" };
   const labels = (p) => (p.bio ? '<span class="tag">Bio</span>' : '') + (p.vegan ? '<span class="tag">Vegan</span>' : '');
 
-  // ——— Onglets Parfums / Soins ———
-  function onglet(nom) {
-    const parfums = nom === "parfums";
-    $("#tabParfums").setAttribute("aria-selected", parfums);
-    $("#tabSoins").setAttribute("aria-selected", !parfums);
-    $("#panelParfums").hidden = !parfums;
-    $("#panelSoins").hidden = parfums;
-  }
-  $("#tabParfums").addEventListener("click", () => onglet("parfums"));
-  $("#tabSoins").addEventListener("click", () => onglet("soins"));
+  // Encadré « À compléter » pour les informations encore manquantes (voir assets/js/config.js).
+  const aCompleter = (quoi) => '<span class="todo">À compléter : ' + echapper(quoi) + '</span>';
+  const familleDe = (p) => p.familleOlf || "";
 
   // ——— Best-sellers ———
   $("#bestGrid").innerHTML = BEST_SELLERS.map((code) => {
@@ -76,7 +69,7 @@
     const i = PARFUMS.indexOf(p);
     const prix = AFFICHER_PRIX && (p.gamme === "luxe" || p.gamme === "luxury") ? '<span class="p-price">' + euros(p.prixGrand) + ' · ' + euros(p.prix15) + '</span>' : '';
     return '<li><button class="p-item" id="parfum-' + i + '" data-p="' + i + '"><span class="p-name">' + echapper(p.nom) +
-      (p.famille ? '<span class="p-fam">' + echapper(p.famille) + '</span>' : '') + '</span>' +
+      (p.famille || familleDe(p) ? '<span class="p-fam">' + echapper(p.famille || familleDe(p)) + '</span>' : '') + '</span>' +
       '<span class="p-ref">' + echapper(p.ref) + '</span>' + prix + '</button></li>';
   }
   const blocsParfums = [];
@@ -155,7 +148,8 @@
       ligne("Inspiration", p.inspiration) + ligne("Format", p.format) + (AFFICHER_PRIX ? ligne("Prix indicatif", euros(p.prix), true) : '') + '</dl>' +
       '<div class="add-row"><button class="btn btn-plum btn-add" data-add="s:' + i + ':' + echapper(p.format) + '">Ajouter au panier</button>' +
       '<a href="#contact" class="btn btn-line btn-add modal-cta">Demander un conseil</a></div>' +
-      (p.sansRef ? '' : '<p class="modal-ref">Référence ' + echapper(p.ref) + (p.echantillon ? ' · échantillon : ' + echapper(p.echantillon) : '') + '</p>'));
+      '<p class="modal-ref">' + (p.sansRef ? '' : 'Référence ' + echapper(p.ref) + (p.echantillon ? ' · échantillon : ' + echapper(p.echantillon) : '') + ' · ') +
+      '<button class="link-btn share" data-share="s-' + echapper(p.ref.split(" ")[0]) + '">Copier le lien</button></p>');
   }
 
   function ouvrirParfum(i) {
@@ -164,10 +158,11 @@
       (p.ref15 ? ligne("15 ml", AFFICHER_PRIX ? euros(p.prix15) : "Disponible", true) : "");
     montrer('<div class="modal-visual' + (p.image ? ' has-photo' : '') + '" style="--tint:' + t + '">' + photo(p, "flacon", t) + '</div>' +
       '<span class="card-cat g-' + p.genre + '">' + echapper(p.genre) + ' · ' + echapper(g.nom) + '</span>' +
-      '<h3 id="modalTitle">' + echapper(p.nom) + '</h3><dl>' + ligne("Famille", p.famille) + ligne("Inspiration", p.inspiration) + formats + '</dl>' +
+      '<h3 id="modalTitle">' + echapper(p.nom) + '</h3><dl>' + ligne("Famille", p.famille) + ligne("Famille olfactive", familleDe(p)) + ligne("Inspiration", p.inspiration) + formats + '</dl>' +
       '<div class="add-row"><button class="btn btn-plum btn-add" data-add="p:' + i + ':' + p.grand + '">Ajouter ' + p.grand + '</button>' +
       (p.ref15 ? '<button class="btn btn-line btn-add" data-add="p:' + i + ':15 ml">Ajouter 15 ml</button>' : '') + '</div>' +
-      '<p class="modal-ref">Référence ' + echapper(p.ref) + (p.ref15 ? ' · 15 ml : ' + echapper(p.ref15) : '') + '</p>');
+      '<p class="modal-ref">Référence ' + echapper(p.ref) + (p.ref15 ? ' · 15 ml : ' + echapper(p.ref15) : '') +
+      ' · <button class="link-btn share" data-share="p-' + echapper(p.ref) + '">Copier le lien</button></p>');
   }
 
   function fermer() { modal.hidden = true; document.body.style.overflow = ""; }
@@ -181,6 +176,10 @@
   modal.addEventListener("click", (e) => {
     const s = e.target.closest(".p-item[data-i]");
     if (s) return ouvrirSoin(+s.dataset.i);
+    const pf = e.target.closest(".p-item[data-p]");
+    if (pf) return ouvrirParfum(+pf.dataset.p);
+    const sh = e.target.closest("[data-share]");
+    if (sh) return partager(sh.dataset.share);
     const b = e.target.closest("[data-add]");
     if (b) ajouter(b.dataset.add);
     if (b || e.target === modal || e.target.closest(".modal-close") || e.target.closest(".modal-cta")) fermer();
@@ -224,7 +223,6 @@
 
   function allerA(x) {
     fermerRecherche();
-    onglet(x.type === "p" ? "parfums" : "soins");
     const el = document.getElementById((x.type === "p" ? "parfum-" : "soin-") + x.i);
     el.closest("details").open = true;
     el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -289,7 +287,7 @@
     const corps = "Bonjour,\n\nVoici ma sélection :\n" + lignes.join("\n") + "\n\nTotal estimé : " + euros(total) + (surDemande ? " (+ articles sur demande)" : "") + "\n\nMerci !";
     $("#cartFoot").innerHTML = '<div class="total"><span>Total estimé</span><strong>' + euros(total) + '</strong></div>' +
       '<p class="foot-note">Hors frais de port' + (surDemande ? ", hors articles dont le prix est sur demande" : "") + '. Ce total est une estimation : aucun paiement n\'est possible ici.</p>' +
-      '<a class="btn btn-plum" href="mailto:simaowilly@gmail.com,Arthur.brp09@gmail.com?subject=' + encodeURIComponent("Ma sélection AW Parfumerie") + '&body=' + encodeURIComponent(corps) + '">Envoyer ma sélection par e-mail</a>' +
+      '<a class="btn btn-plum" href="mailto:' + CONFIG.emails.join(",") + '?subject=' + encodeURIComponent("Ma sélection AW Parfumerie") + '&body=' + encodeURIComponent(corps) + '">Envoyer ma sélection par e-mail</a>' +
       '<button class="link-btn" id="cartClear">Vider le panier</button>';
   }
   const drawer = $("#drawer"), drawerBg = $("#drawerBg");
@@ -316,10 +314,129 @@
     else if (!panel.hidden) fermerRecherche();
   });
 
+  // ——— Engagements sous l'accueil ———
+  $("#trust").innerHTML = [
+    ["70 ml ou 15 ml", "Testez avant d'adopter"],
+    ["Conseil personnalisé", CONFIG.delaiReponse, "délai de réponse"],
+    ["Livraison", CONFIG.livraison, "livraison"],
+    ["Paiement", CONFIG.paiement, "paiement"]
+  ].map(([t, v, manque]) => '<li><strong>' + t + '</strong><span>' + (v ? echapper(v) : aCompleter(manque)) + '</span></li>').join("");
+  document.querySelectorAll("[data-config]").forEach((el) => {
+    const v = CONFIG[el.dataset.config];
+    el.insertAdjacentHTML("beforeend", " " + (v ? echapper(v) + "." : aCompleter(el.dataset.label)));
+  });
+
+  // ——— Familles olfactives ———
+  const parfumsDeFamille = (f) => PARFUMS.filter((p) => familleDe(p) === f);
+  $("#familiesGrid").innerHTML = Object.entries(FAMILLES_OLFACTIVES).map(([nom, f]) =>
+    '<button class="family" data-famille="' + nom + '" style="--c:' + f.couleur + '"><span class="family-dot"></span><h3>' + nom + '</h3>' +
+    '<p>' + echapper(f.texte) + '</p><span class="more">' + compte(parfumsDeFamille(nom).length, "parfum") + ' →</span></button>'
+  ).join("");
+  const sansIds = (html) => html.replace(/ id="(parfum|soin)-\d+"/g, "");
+  function listeParGenre(items) {
+    return ["Femme", "Homme", "Mixte"].map((g) => {
+      const l = items.filter((p) => p.genre === g);
+      return l.length ? '<h4 class="acc-sub g-' + g + '">' + g + '</h4><ul class="p-list p-list-one">' + sansIds(l.map(ligneParfum).join("")) + '</ul>' : "";
+    }).join("");
+  }
+  $("#familiesGrid").addEventListener("click", (e) => {
+    const b = e.target.closest(".family");
+    if (!b) return;
+    const nom = b.dataset.famille;
+    montrer('<span class="card-cat">Famille olfactive</span><h3 id="modalTitle">' + nom + '</h3><p class="modal-text">' + echapper(FAMILLES_OLFACTIVES[nom].texte) +
+      ' Familles indicatives, déduites du parfum d\'inspiration.</p>' + listeParGenre(parfumsDeFamille(nom)));
+  });
+
+  // ——— Test « Trouver mon parfum » (3 questions) ———
+  const QUESTIONS = [
+    { cle: "genre", titre: "Pour qui est ce parfum ?", choix: [["Femme", "Pour elle"], ["Homme", "Pour lui"], ["Mixte", "À partager"], ["", "Peu importe"]] },
+    { cle: "famille", titre: "Quelle ambiance vous attire ?", choix: Object.entries(FAMILLES_OLFACTIVES).map(([n, f]) => [n, n, f.texte]).concat([["", "Je ne sais pas"]]) },
+    { cle: "gamme", titre: "Quel budget pour le grand flacon ?", choix: [["classique", "35 € les 70 ml", "Gamme Classiques"], ["luxe", "45 à 57 € les 70 ml", "Gamme Luxe"], ["luxury", "52 à 65 € les 50 ml", "Gamme Luxury"], ["", "Peu importe"]] }
+  ];
+  let reponses = {};
+  function question(k) {
+    const q = QUESTIONS[k];
+    montrer('<span class="card-cat">Trouver mon parfum · question ' + (k + 1) + ' sur 3</span><h3 id="modalTitle">' + q.titre + '</h3>' +
+      '<div class="quiz-options">' + q.choix.map(([v, t, d]) => '<button class="quiz-opt" data-k="' + k + '" data-v="' + v + '"><strong>' + t + '</strong>' + (d ? '<span>' + echapper(d) + '</span>' : '') + '</button>').join("") + '</div>' +
+      (k ? '<button class="link-btn" data-retour="' + (k - 1) + '">← Question précédente</button>' : ''));
+  }
+  function resultatsQuiz() {
+    const genres = reponses.genre === "Femme" ? ["Femme", "Mixte"] : reponses.genre === "Homme" ? ["Homme", "Mixte"] : reponses.genre === "Mixte" ? ["Mixte"] : ["Femme", "Homme", "Mixte"];
+    const base = PARFUMS.filter((p) => genres.includes(p.genre) && p.gamme !== "enfant");
+    const essais = [
+      (p) => (!reponses.famille || familleDe(p) === reponses.famille) && (!reponses.gamme || p.gamme === reponses.gamme),
+      (p) => !reponses.famille || familleDe(p) === reponses.famille,
+      () => true
+    ];
+    let res = [], assoupli = false;
+    for (let k = 0; k < essais.length && res.length < 3; k++) { res = base.filter(essais[k]); assoupli = k > 0; }
+    res.sort((a, b) => (b.genre === reponses.genre) - (a.genre === reponses.genre));
+    montrer('<span class="card-cat">Trouver mon parfum · résultats</span><h3 id="modalTitle">Nos suggestions pour vous</h3>' +
+      '<p class="modal-text">' + (assoupli ? "Peu de parfums correspondent exactement : nous avons élargi la sélection. " : "") +
+      'Astuce : découvrez-les d\'abord en 15 ml.</p><ul class="p-list p-list-one">' + sansIds(res.slice(0, 8).map((p) => ligneParfum(p).replace("</button>",
+        (AFFICHER_PRIX && p.gamme !== "luxe" && p.gamme !== "luxury" && p.prix15 ? '<span class="p-price">dès ' + euros(p.prix15) + '</span>' : '') + "</button>")).join("")) + '</ul>' +
+      '<button class="link-btn" data-retour="0">Recommencer le test</button>');
+  }
+  document.querySelectorAll("[data-quiz]").forEach((b) => b.addEventListener("click", () => { reponses = {}; question(0); }));
+  modal.addEventListener("click", (e) => {
+    const o = e.target.closest(".quiz-opt");
+    if (o) { const k = +o.dataset.k; reponses[QUESTIONS[k].cle] = o.dataset.v; return k < 2 ? question(k + 1) : resultatsQuiz(); }
+    const r = e.target.closest("[data-retour]");
+    if (r) { if (r.dataset.retour === "0") reponses = {}; question(+r.dataset.retour); }
+  });
+
+  // ——— Avis, histoire, FAQ, contact ———
+  $("#reviewsGrid").innerHTML = (CONFIG.avis.length ? CONFIG.avis : [null, null, null]).map((a) => a
+    ? '<figure class="review"><span class="stars" aria-label="' + a.note + ' sur 5">' + "★".repeat(a.note) + '</span><blockquote>« ' + echapper(a.texte) + ' »</blockquote><figcaption>' + echapper(a.nom) + (a.ville ? ', ' + echapper(a.ville) : '') + '</figcaption></figure>'
+    : '<figure class="review">' + aCompleter("avis client (prénom, note, texte)") + '</figure>').join("");
+
+  $("#storyText").innerHTML = (CONFIG.histoire.length ? CONFIG.histoire.map((t) => '<p>' + echapper(t) + '</p>').join("")
+    : '<p>' + aCompleter("votre histoire : qui vous êtes, quand et pourquoi vous avez créé AW Parfumerie") + '</p>') +
+    (CONFIG.fondateurs ? '<p class="signature">' + echapper(CONFIG.fondateurs) + '</p>' : '<p>' + aCompleter("prénoms des fondateurs") + '</p>');
+
+  const FAQ = [
+    ["Quelle différence entre le 70 ml et le 15 ml ?", "C'est la même fragrance. Le 15 ml (11,90 € pour les Classiques) permet de découvrir un parfum ou de l'emporter partout ; le 70 ml (35 €) est le format à adopter."],
+    ["Comment passer commande ?", "Ajoutez vos produits au panier, puis cliquez sur « Envoyer ma sélection par e-mail ». Nous vous recontactons pour confirmer la disponibilité, le paiement et la livraison."],
+    ["Comment payer ?", CONFIG.paiement, "moyens de paiement acceptés"],
+    ["Quels sont les délais et frais de livraison ?", CONFIG.livraison, "délais, frais et zone de livraison"],
+    ["Combien de temps tient un parfum ?", "", "tenue moyenne des parfums sur la peau"],
+    ["Que signifie « inspiration » ?", "Nos parfums sont créés en s'inspirant de fragrances célèbres : l'inspiration indique la senteur de référence. Ce ne sont ni des copies, ni des contrefaçons."],
+    ["Puis-je retourner un produit ?", "Les parfums ouverts ne sont ni repris, ni échangés.", "conditions pour un produit non ouvert"],
+    ["Proposez-vous des échantillons ?", "Le format 15 ml permet de découvrir chaque parfum. Les sprays d'ambiance existent aussi en échantillon (code CCP indiqué sur leur fiche)."]
+  ];
+  $("#faqList").innerHTML = FAQ.map(([q, rep, manque], k) => bloc("faq-" + k, "faq", echapper(q), "", "", "",
+    '<p>' + (rep ? echapper(rep) : "") + (manque && (!rep || k === 6) ? " " + aCompleter(manque) : "") + '</p>')).join("");
+
+  const carte = (titre, contenu) => '<div class="contact-card"><span class="caps-label">' + titre + '</span>' + contenu + '</div>';
+  $("#contactGrid").innerHTML =
+    carte("Par e-mail", CONFIG.emails.map((m) => '<a href="mailto:' + m + '" class="contact-link">' + m + '</a>').join("")) +
+    carte("Téléphone", CONFIG.telephone ? '<a href="tel:' + CONFIG.telephone.replace(/\s/g, "") + '" class="contact-link">' + echapper(CONFIG.telephone) + '</a>' : aCompleter("numéro de téléphone")) +
+    carte("WhatsApp", CONFIG.whatsapp ? '<a href="https://wa.me/' + CONFIG.whatsapp + '" class="contact-link" target="_blank" rel="noopener">Nous écrire</a>' : aCompleter("numéro WhatsApp")) +
+    carte("Réseaux sociaux", (CONFIG.instagram ? '<a href="' + CONFIG.instagram + '" class="contact-link" target="_blank" rel="noopener">Instagram</a>' : aCompleter("lien Instagram")) +
+      (CONFIG.tiktok ? '<a href="' + CONFIG.tiktok + '" class="contact-link" target="_blank" rel="noopener">TikTok</a>' : '')) +
+    carte("Zone de livraison", CONFIG.zone ? '<p>' + echapper(CONFIG.zone) + '</p>' : aCompleter("ville ou zone desservie"));
+  if (CONFIG.whatsapp) { const w = $("#whatsappBtn"); w.href = "https://wa.me/" + CONFIG.whatsapp; w.hidden = false; }
+
+  // ——— Liens directs vers une fiche (#p-006W, #s-SBM001) ———
+  function partager(code) {
+    const url = location.href.split("#")[0] + "#" + code;
+    const fini = () => toast("Lien copié : vous pouvez le partager");
+    try { navigator.clipboard.writeText(url).then(fini, () => prompt("Copiez ce lien :", url)); } catch (err) { prompt("Copiez ce lien :", url); }
+  }
+  function ouvrirDepuisAdresse() {
+    const m = location.hash.match(/^#([ps])-(.+)$/);
+    if (!m) return;
+    const ref = decodeURIComponent(m[2]);
+    const i = m[1] === "p" ? parfumParRef[ref] : PRODUITS.findIndex((p) => p.ref.split(" ")[0] === ref);
+    if (i != null && i >= 0) allerA({ type: m[1], i });
+  }
+  window.addEventListener("hashchange", ouvrirDepuisAdresse);
+
   // ——— Menu mobile ———
   const toggle = $(".menu-toggle");
   toggle.addEventListener("click", () => { const o = document.body.classList.toggle("nav-open"); toggle.setAttribute("aria-expanded", o); });
   document.querySelectorAll(".nav a").forEach((a) => a.addEventListener("click", () => document.body.classList.remove("nav-open")));
 
   dessinerPanier();
+  ouvrirDepuisAdresse();
 })();
