@@ -6,6 +6,7 @@
   <title>Le parfum et vous · AW Parfumerie</title>
   <meta name="description" content="10 questions, 2 minutes : parlez-nous de votre rapport au parfum, puis découvrez AW Parfumerie." />
   <meta name="theme-color" content="#f6efe7" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://*.supabase.co; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'self'" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -57,6 +58,8 @@
     </section>
   </main>
 
+  <script src="config.js"></script>
+  <script src="supabase.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

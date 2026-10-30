@@ -118,3 +118,9 @@ fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
   .ligne { grid-template-columns: 1fr auto; }
   .ligne .piste { grid-column: 1 / -1; grid-row: 2; }
 }
+.connexion { display: grid; gap: .8rem; width: min(420px, 100%); margin: 0 auto; text-align: center; }
+.connexion h1 { margin-bottom: .6rem; font-family: var(--serif); font-size: 2rem; font-weight: 600; }
+.connexion label { font-size: .8rem; font-weight: 600; color: var(--gris); text-align: left; }
+.connexion .champ { margin-top: 0; }
+.connexion .surtitre { margin-bottom: 0; }
+.connexion .erreur { margin-top: 0; }

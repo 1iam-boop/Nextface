@@ -6,74 +6,62 @@ Un petit site en trois étapes :
 2. **une présentation d'AW Parfumerie en 3 phrases** ;
 3. **un lien vers le site AW Parfumerie** (https://1iam-boop.github.io/Nextface/).
 
-Chaque questionnaire envoyé est enregistré dans **une petite base de données SQLite** (un simple fichier, `data/questionnaire.db`). Une page protégée par mot de passe affiche les résultats et permet de tout télécharger pour Excel.
+Le site est hébergé gratuitement sur **GitHub Pages**, à côté de la vitrine :
+`https://1iam-boop.github.io/Nextface/questionnaire/`.
+Les réponses sont enregistrées dans **une petite base de données gratuite chez [Supabase](https://supabase.com)** (PostgreSQL). Une page protégée par mot de passe affiche les résultats et permet de tout télécharger pour Excel : `…/questionnaire/admin/`.
 
 Les réponses sont anonymes : ni nom, ni e-mail, ni adresse IP ne sont enregistrés.
 
-## Lancer le site sur son ordinateur
+## Mise en route (une seule fois, environ 5 minutes)
 
-Il faut seulement [Node.js](https://nodejs.org/) version 22.13 ou plus récente (aucun paquet à installer).
+### 1. Créer la base de données
+1. Sur [supabase.com](https://supabase.com), cliquez sur **Start your project** et connectez-vous avec votre compte **GitHub**.
+2. Cliquez sur **New project** : nom `aw-questionnaire`, mot de passe de la base (bouton **Generate**, inutile de le retenir), région en Europe (Paris ou Francfort), offre **Free**. Validez et patientez une à deux minutes.
 
-```bash
-cd questionnaire
-```
+### 2. Créer les tables
+1. Dans le menu de gauche, ouvrez **SQL Editor**.
+2. Copiez tout le contenu du fichier [`supabase.sql`](supabase.sql) et collez-le.
+3. Ligne 19, remplacez `CHANGEZ-MOI` par le mot de passe de votre choix pour la page des résultats (gardez les apostrophes autour).
+4. Cliquez sur **Run**. Si Supabase demande une confirmation, acceptez.
 
-```bash
-cp .env.exemple .env
-```
+### 3. Relier le site à la base
+Dans **Project Settings** :
+- rubrique **Data API** : copiez la **Project URL** (`https://….supabase.co`) ;
+- rubrique **API Keys** : copiez la clé **Publishable** (`sb_publishable_…`).
 
-Ouvrez `.env` et choisissez un mot de passe après `ADMIN_PASSWORD=`, puis :
+Collez-les dans [`config.js`](config.js), entre les guillemets de `url` et de `cle`. Ces deux valeurs sont faites pour être publiques. Ne mettez jamais la clé **secret** ni le mot de passe de la base dans ce fichier.
 
-```bash
-npm start
-```
-
-- Questionnaire : http://localhost:3000
-- Résultats : http://localhost:3000/admin/ (le navigateur demande un identifiant, mettez ce que vous voulez, et le mot de passe choisi)
+Dès que `config.js` est rempli sur la branche `main`, le questionnaire fonctionne en ligne.
 
 ## Les fichiers
 
 | Fichier | Rôle |
 |---|---|
-| `questions.js` | **Les 10 questions** : intitulés, types et réponses proposées. À modifier ici, la base se met à jour au redémarrage. |
-| `public/index.html` | La page du questionnaire, avec **les 3 phrases de présentation** et **le lien** vers AW Parfumerie |
-| `public/app.js` | Affiche les questions une par une et envoie les réponses |
-| `public/style.css` | Le style (mêmes couleurs et polices que le site AW Parfumerie) |
-| `public/admin/` | La page des résultats |
-| `server.js` | Le serveur : envoie les pages, vérifie et enregistre les réponses |
-| `base.js` | La base de données (création des tables, statistiques, export) |
+| `index.html` | La page du questionnaire, avec **les 3 phrases de présentation** et **le lien** vers AW Parfumerie |
+| `app.js` | Affiche les questions une par une et enregistre les réponses |
+| `style.css` | Le style (mêmes couleurs et polices que le site AW Parfumerie) |
+| `config.js` | L'adresse et la clé publique de la base Supabase |
+| `supabase.js` | Les appels à la base de données |
+| `admin/` | La page des résultats |
+| `supabase.sql` | La base de données : tables, **les 10 questions**, vérification des réponses, statistiques, droits d'accès |
 
-### La base de données
+## La base de données
 
 | Table | Contenu |
 |---|---|
-| `questions` | les questions (recopiées depuis `questions.js` à chaque démarrage) |
+| `questions` | les 10 questions et leurs réponses proposées |
 | `participations` | une ligne par questionnaire envoyé, avec sa date |
 | `reponses` | une ligne par réponse (plusieurs lignes pour une question à choix multiples) |
 
-Le fichier `data/questionnaire.db` n'est pas envoyé sur GitHub (voir `.gitignore`). Pensez à le sauvegarder de temps en temps, ou téléchargez le CSV depuis la page des résultats. Il s'ouvre aussi avec [DB Browser for SQLite](https://sqlitebrowser.org/).
+Vous pouvez les consulter dans Supabase › **Table Editor**.
 
-### Modifier les questions
+Le site ne peut que lire les questions et appeler trois fonctions définies dans `supabase.sql` :
+`enregistrer_reponses` vérifie chaque réponse avant de l'enregistrer, et `resultats` et `export_reponses` ne répondent qu'avec le mot de passe des résultats. Personne ne peut lire, modifier ou supprimer les réponses avec la clé publique.
 
-Dans `questions.js`, chaque question a un `type` :
+### Modifier les questions ou le mot de passe
+Modifiez la partie « Les 10 questions » ou le mot de passe dans `supabase.sql`, puis relancez tout le script dans le SQL Editor : les réponses déjà enregistrées sont conservées. Ne remettez pas votre mot de passe dans le fichier sur GitHub, il est public.
 
-- `"unique"` : une seule réponse parmi les `choix`
-- `"multiple"` : plusieurs réponses possibles parmi les `choix`
-- `"note"` : une note de 1 à 5 (les `etiquettes` s'affichent sous 1 et sous 5)
-- `"texte"` : une réponse libre (200 caractères au plus)
+Chaque question a un `type` : `unique` (une réponse), `multiple` (plusieurs), `note` (de 1 à 5) ou `texte` (réponse libre, facultative si `obligatoire` vaut `false`). Ne changez pas l'`id` d'une question qui a déjà des réponses.
 
-Ne changez pas l'`id` d'une question qui a déjà des réponses. Si vous changez l'intitulé d'un choix, les anciennes réponses restent comptées sous l'ancien intitulé.
-
-## Mettre le site en ligne
-
-GitHub Pages ne sait afficher que des pages fixes : ce site a besoin d'un hébergeur qui fait tourner **Node.js** et qui **garde les fichiers** entre deux redémarrages (sinon la base de données serait effacée). Par exemple [alwaysdata](https://www.alwaysdata.com/fr/) (hébergeur français, offre gratuite de 100 Mo), ou un petit serveur VPS.
-
-Ce qu'il faut renseigner chez l'hébergeur :
-
-- dossier du site : `questionnaire`
-- commande de démarrage : `node --disable-warning=ExperimentalWarning server.js`
-- variable d'environnement `ADMIN_PASSWORD` : le mot de passe de la page des résultats
-- le port est lu dans la variable `PORT` (et l'adresse dans `HOST` ou `IP`), que la plupart des hébergeurs fournissent d'eux-mêmes ;
-  `DB_PATH` permet de placer la base ailleurs que dans `data/`
-
-Une fois en ligne, l'adresse du questionnaire peut être transformée en QR code, comme sur l'affiche du site.
+### Mise en pause par Supabase
+Supabase met en pause les projets gratuits après une semaine sans activité. Pour l'éviter, le robot [`.github/workflows/supabase-reveil.yml`](../.github/workflows/supabase-reveil.yml) consulte la base tous les 3 jours. Si la base est malgré tout en pause, il suffit de cliquer sur **Restore project** dans Supabase : rien n'est perdu.

@@ -1,6 +1,6 @@
 /*
- * Le questionnaire : charge les questions depuis la base, les affiche une par une,
- * envoie les réponses au serveur puis montre la présentation d'AW Parfumerie.
+ * Le questionnaire : charge les questions depuis la base de données, les affiche une par une,
+ * y enregistre les réponses puis montre la présentation d'AW Parfumerie.
  */
 (function () {
   "use strict";
@@ -21,10 +21,14 @@
   async function charger() {
     const commencer = $("#commencer");
     const message = $("#erreurChargement");
+    if (!Base.configuree) {
+      message.textContent = "Le questionnaire n'est pas encore relié à sa base de données (voir README.md).";
+      message.hidden = false;
+      return;
+    }
     try {
-      const reponse = await fetch("api/questions");
-      if (!reponse.ok) throw new Error();
-      questions = (await reponse.json()).questions;
+      questions = await Base.questions();
+      if (!questions.length) throw new Error();
       barre.setAttribute("aria-valuemax", questions.length);
       commencer.disabled = false;
       message.hidden = true;
@@ -152,20 +156,13 @@
     suivant.disabled = precedent.disabled = true;
     suivant.textContent = "Envoi en cours…";
     try {
-      const reponse = await fetch("api/reponses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reponses })
-      });
-      if (!reponse.ok) {
-        const donnees = await reponse.json().catch(() => ({}));
-        signaler(donnees.erreur || "L'envoi n'a pas abouti. Réessayez dans un instant.");
-        return;
-      }
+      await Base.enregistrer(reponses);
       montrer("merci");
       $("#merci .titre").focus();
-    } catch {
-      signaler("L'envoi n'a pas abouti. Vérifiez votre connexion puis réessayez.");
+    } catch (err) {
+      signaler(err.statut
+        ? err.message || "L'envoi n'a pas abouti. Réessayez dans un instant."
+        : "L'envoi n'a pas abouti. Vérifiez votre connexion puis réessayez.");
     } finally {
       suivant.disabled = precedent.disabled = false;
       suivant.textContent = "Envoyer mes réponses";
