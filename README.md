@@ -9,7 +9,6 @@ Site vitrine (sans paiement, panier de simulation uniquement) : recherche direct
 - `assets/js/produits.js` : **la liste des soins** (source : AW Catalogue) ; mettre `AFFICHER_PRIX = false` pour masquer tous les prix
 - `assets/css/vitrine.css` : le style (crème, prune, taupe, brun)
 - `assets/img/` : photos des produits (flacons femme et homme/mixte, brumes, diffuseur, spray d'ambiance)
-- `questionnaire/` : le questionnaire de 10 questions, suivi d'une présentation d'AW Parfumerie en 3 phrases et d'un lien vers la vitrine ; les réponses sont enregistrées dans une base de données Supabase (mise en route dans `questionnaire/README.md`)
 
 ## Mise en ligne sur GitHub Pages
 Settings → Pages → Source : « Deploy from a branch » → branche `main`, dossier `/ (root)`.
